@@ -1,0 +1,16 @@
+{
+  "name": "senditealready",
+  "version": "1.0.0",
+  "description": "AI proposal generator for freelancers — SendItAlready.co",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "openai": "^4.28.0",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
