@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SendItAlready — Win more clients</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --ink2: #6b6860;
+    --ink3: #b0ada6;
+    --paper: #faf9f6;
+    --card: #ffffff;
+    --accent: #4f46e5;
+    --accent-light: #eef2ff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --border: #e8e5df;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid var(--border);
+    background: var(--paper); position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-link { font-size: 13px; color: var(--ink2); text-decoration: none; }
+  .nav-btn { font-size: 13px; font-weight: 500; padding: 8px 16px; background: var(--ink); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+
+  .app-shell { display: grid; grid-template-columns: 1fr 420px; min-height: calc(100vh - 57px); }
+
+  .wizard-panel { padding: 40px 48px; border-right: 1px solid var(--border); overflow-y: auto; }
+  .wizard-top { margin-bottom: 32px; }
+  .wizard-top h1 { font-family: 'Instrument Serif', serif; font-size: 32px; line-height: 1.2; color: var(--ink); margin-bottom: 6px; }
+  .wizard-top h1 em { font-style: italic; color: var(--accent); }
+  .wizard-top p { font-size: 14px; color: var(--ink2); }
+
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+  .progress-label { font-size: 12px; color: var(--ink3); }
+
+  .step { display: none; animation: fadeUp 0.3s ease; }
+  .step.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-q { font-size: 18px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .step-hint { font-size: 13px; color: var(--ink2); margin-bottom: 18px; }
+
+  .field { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--card); outline: none; transition: border-color 0.2s; }
+  .field:focus { border-color: var(--accent); }
+  textarea.field { min-height: 100px; resize: vertical; line-height: 1.6; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .tag { padding: 8px 16px; border-radius: 99px; border: 1.5px solid var(--border); font-size: 13px; font-weight: 500; color: var(--ink2); cursor: pointer; transition: all 0.15s; background: var(--card); user-select: none; }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+  .tag.sel { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  .budget-display { font-family: 'Instrument Serif', serif; font-size: 42px; color: var(--ink); margin-bottom: 12px; min-height: 52px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); height: 4px; cursor: pointer; }
+  .budget-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink3); margin-top: 6px; }
+
+  .payment-prompt { background: var(--green-light); border: 1.5px solid #bbf7d0; border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+  .payment-prompt h3 { font-size: 14px; font-weight: 500; color: var(--green); margin-bottom: 4px; }
+  .payment-prompt p { font-size: 12px; color: #15803d; line-height: 1.5; }
+  .payment-options { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .pay-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); cursor: pointer; transition: border-color 0.15s; }
+  .pay-opt.sel { border-color: var(--accent); }
+  .pay-opt-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .pay-opt-label { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .pay-opt-sub { font-size: 11px; color: var(--ink2); }
+  .pay-input-wrap { margin-top: 8px; display: none; }
+  .pay-input-wrap.show { display: block; }
+
+  .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-back { padding: 12px 20px; border-radius: 10px; border: 1.5px solid var(--border); background: none; font-size: 14px; color: var(--ink2); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .btn-next { flex: 1; padding: 14px; border-radius: 10px; background: var(--ink); color: #fff; border: none; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-next:hover { background: #2d2b27; }
+  .btn-next.generating { background: var(--accent); pointer-events: none; }
+  .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  .btn-next.generating .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .preview-panel { background: #f0ede8; padding: 32px 28px; overflow-y: auto; }
+  .preview-label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--ink3); text-transform: uppercase; margin-bottom: 16px; }
+
+  .proposal-card { background: var(--card); border-radius: 16px; padding: 28px; border: 1px solid var(--border); }
+  .proposal-card.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; text-align: center; border: 2px dashed var(--border); background: transparent; }
+  .empty-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--border); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .empty-title { font-size: 15px; font-weight: 500; color: var(--ink2); margin-bottom: 4px; }
+  .empty-sub { font-size: 13px; color: var(--ink3); }
+
+  .prop-header { margin-bottom: 20px; }
+  .prop-from { font-size: 11px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .prop-title { font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.3; color: var(--ink); margin-bottom: 8px; }
+  .prop-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .prop-chip { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: var(--accent-light); color: var(--accent); }
+  .prop-divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .prop-section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+  .prop-body { font-size: 13px; line-height: 1.7; color: var(--ink2); margin-bottom: 16px; }
+
+  .scope-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .scope-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); }
+  .scope-check { width: 18px; height: 18px; border-radius: 5px; background: var(--green-light); border: 1px solid #bbf7d0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .scope-check svg { width: 10px; height: 10px; }
+
+  .budget-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .budget-table td { padding: 6px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .budget-table td:last-child { text-align: right; color: var(--ink); }
+  .budget-table tr:last-child td { border-bottom: none; font-weight: 500; font-size: 15px; }
+
+  .pay-block { background: var(--accent-light); border-radius: 10px; padding: 14px; margin-top: 14px; }
+  .pay-block-title { font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
+  .pay-block-sub { font-size: 12px; color: #4338ca; margin-bottom: 10px; line-height: 1.5; }
+  .pay-link-btn { display: block; width: 100%; padding: 10px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; font-family: 'DM Sans', sans-serif; }
+
+  .preview-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .act-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); font-size: 12px; font-weight: 500; color: var(--ink2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
+  .act-btn:hover { border-color: var(--ink2); }
+  .act-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .act-btn.primary:hover { background: #2d2b27; }
+
+  .skel { background: linear-gradient(90deg, #f0ede8 25%, #e8e4dd 50%, #f0ede8 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; height: 14px; margin-bottom: 8px; }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  @media (max-width: 768px) {
+    .app-shell { grid-template-columns: 1fr; }
+    .preview-panel { display: none; }
+    .wizard-panel { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><div class="logo-dot"></div> SendItAlready</div>
+  <div class="nav-right">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="#" class="nav-link">My proposals</a>
+    <button class="nav-btn">Sign in</button>
+  </div>
+</nav>
+
+<div class="app-shell">
+  <div class="wizard-panel">
+    <div class="wizard-top">
+      <h1>Create a proposal that <em>wins.</em></h1>
+      <p>Answer 5 quick questions — your proposal generates instantly.</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress" style="width:20%"></div></div>
+      <div class="progress-label" id="progress-label">Step 1 of 5</div>
+    </div>
+
+    <div class="step active" id="step-1">
+      <div class="step-q">Who's this proposal for?</div>
+      <div class="step-hint">The client or company name you're pitching to.</div>
+      <input class="field" type="text" id="clientName" placeholder="e.g. Acme Marketing Co." oninput="updatePreview()">
+      <div class="btn-row">
+        <button class="btn-next" onclick="next(1)">Next — project type →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-2">
+      <div class="step-q">What kind of project is it?</div>
+      <div class="step-hint">Pick one or type your own.</div>
+      <div class="tags" id="type-tags">
+        <div class="tag" onclick="selectTag(this,'projectType')">Website design</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Branding</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Copywriting</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Photography</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Social media</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Video editing</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">SEO</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">Logo design</div>
+        <div class="tag" onclick="selectTag(this,'projectType')">App development</div>
+      </div>
+      <input class="field" type="text" id="projectType" placeholder="Or type your own..." oninput="updatePreview()" style="margin-top:12px">
+      <div class="btn-row">
+        <button class="btn-back" onclick="back(2)">← Back</button>
+        <button class="btn-next" onclick="next(2)">Next — budget →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-3">
+      <div class="step-q">What's the project budget?</div>
+      <div class="step-hint">Drag to set. This goes on the proposal.</div>
+      <div class="budget-display" id="budget-display">$2,500</div>
+      <input type="range" id="budgetSlider" min="500" max="25000" step="500" value="2500" oninput="updateBudget(this.value)">
+      <div class="budget-labels"><span>$500</span><span>$25,000</span></div>
+      <input type="hidden" id="budget" value="$2,500">
+      <div class="btn-row">
+        <button class="btn-back" onclick="back(3)">← Back</button>
+        <button class="btn-next" onclick="next(3)">Next — timeline →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-4">
+      <div class="step-q">How long will it take?</div>
+      <div class="step-hint">Pick the closest estimate.</div>
+      <div class="tags" id="timeline-tags">
+        <div class="tag" onclick="selectTag(this,'timeline')">1 week</div>
+        <div class="tag" onclick="selectTag(this,'timeline')">2 weeks</div>
+        <div class="tag" onclick="selectTag(this,'timeline')">3–4 weeks</div>
+        <div class="tag" onclick="selectTag(this,'timeline')">4–6 weeks</div>
+        <div class="tag" onclick="selectTag(this,'timeline')">2–3 months</div>
+        <div class="tag" onclick="selectTag(this,'timeline')">Ongoing</div>
+      </div>
+      <input class="field" type="text" id="timeline" placeholder="Or describe it..." oninput="updatePreview()" style="margin-top:12px">
+      <div class="btn-row">
+        <button class="btn-back" onclick="back(4)">← Back</button>
+        <button class="btn-next" onclick="next(4)">Next — deliverables →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-5">
+      <div class="step-q">What exactly will you deliver?</div>
+      <div class="step-hint">Quick bullet points are fine — AI will make it sound great.</div>
+      <textarea class="field" id="deliverables" placeholder="e.g. 5-page website, mobile responsive, WordPress CMS, 2 rounds of revisions, handoff files..." oninput="updatePreview()"></textarea>
+
+      <div style="margin-top: 20px;">
+        <div class="payment-prompt">
+          <h3>Get paid directly from your proposal</h3>
+          <p>Add a payment link so your client can pay the deposit without leaving the proposal. Takes 10 seconds.</p>
+        </div>
+        <div class="payment-options">
+          <div class="pay-opt" id="opt-stripe" onclick="selectPayment('stripe')">
+            <div class="pay-opt-icon" style="background:#f0f0ff">💳</div>
+            <div><div class="pay-opt-label">Stripe payment link</div><div class="pay-opt-sub">Paste a link from your Stripe dashboard</div></div>
+          </div>
+          <div class="pay-opt" id="opt-paypal" onclick="selectPayment('paypal')">
+            <div class="pay-opt-icon" style="background:#fff4e0">🅿</div>
+            <div><div class="pay-opt-label">PayPal.me link</div><div class="pay-opt-sub">e.g. paypal.me/yourname</div></div>
+          </div>
+          <div class="pay-opt" id="opt-etransfer" onclick="selectPayment('etransfer')">
+            <div class="pay-opt-icon" style="background:#f0fdf4">🏦</div>
+            <div><div class="pay-opt-label">E-transfer / bank info</div><div class="pay-opt-sub">Just your email address</div></div>
+          </div>
+          <div class="pay-opt" id="opt-skip" onclick="selectPayment('skip')">
+            <div class="pay-opt-icon" style="background:#f8f8f6">⏭</div>
+            <div><div class="pay-opt-label">Skip for now</div><div class="pay-opt-sub">You can add this later</div></div>
+          </div>
+        </div>
+        <div class="pay-input-wrap" id="payment-input-wrap">
+          <input class="field" type="text" id="paymentInfo" placeholder="Paste your payment link or email..." style="margin-top: 8px;" oninput="updatePreview()">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="back(5)">← Back</button>
+        <button class="btn-next" id="generate-btn" onclick="generate()">
+          <div class="spinner" id="spinner"></div>
+          <span id="generate-label">Send it already ✦</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-label">Live preview</div>
+    <div class="proposal-card empty" id="empty-state">
+      <div class="empty-icon">📄</div>
+      <div class="empty-title">Your proposal appears here</div>
+      <div class="empty-sub">Fill in the form and it updates as you go</div>
+    </div>
+    <div class="proposal-card" id="proposal-preview" style="display:none">
+      <div class="prop-header">
+        <div class="prop-from">Proposal</div>
+        <div class="prop-title" id="prev-title">Your proposal</div>
+        <div class="prop-meta">
+          <div class="prop-chip" id="prev-type-chip">—</div>
+          <div class="prop-chip" id="prev-budget-chip">—</div>
+          <div class="prop-chip" id="prev-timeline-chip">—</div>
+        </div>
+      </div>
+      <div class="prop-divider"></div>
+      <div id="proposal-body">
+        <div class="prop-body" id="prev-intro">Fill in your details and the full proposal will appear here...</div>
+      </div>
+      <div id="generated-content" style="display:none">
+        <div class="prop-section-label">Scope of work</div>
+        <div class="scope-list" id="prev-scope"></div>
+        <div class="prop-divider"></div>
+        <div class="prop-section-label">Investment</div>
+        <table class="budget-table" id="prev-budget-table"></table>
+        <div class="pay-block" id="prev-pay-block" style="display:none">
+          <div class="pay-block-title" id="prev-pay-title">Pay deposit to get started</div>
+          <div class="pay-block-sub" id="prev-pay-sub"></div>
+          <a class="pay-link-btn" id="prev-pay-link" href="#" target="_blank">Pay deposit now →</a>
+        </div>
+      </div>
+    </div>
+    <div class="preview-actions" id="preview-actions" style="display:none">
+      <button class="act-btn" onclick="copyLink()">Copy link</button>
+      <button class="act-btn" onclick="downloadPDF()">Download PDF</button>
+      <button class="act-btn primary" onclick="sendProposal()">Send to client →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 1;
+let selectedPayment = null;
+let generatedProposal = null;
+
+function updateProgress() {
+  const pct = (currentStep / 5) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Step ${currentStep} of 5`;
+}
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  currentStep = n; updateProgress();
+}
+function next(from) {
+  if (from === 1 && !document.getElementById('clientName').value.trim()) { document.getElementById('clientName').focus(); return; }
+  updatePreviewBasic(); showStep(from + 1);
+}
+function back(from) { showStep(from - 1); }
+function selectTag(el, fieldId) {
+  el.closest('.tags').querySelectorAll('.tag').forEach(t => t.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById(fieldId).value = el.textContent;
+  updatePreview();
+}
+function updateBudget(val) {
+  const formatted = '$' + parseInt(val).toLocaleString();
+  document.getElementById('budget-display').textContent = formatted;
+  document.getElementById('budget').value = formatted;
+  updatePreview();
+}
+function selectPayment(type) {
+  selectedPayment = type;
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('sel'));
+  document.getElementById('opt-' + type).classList.add('sel');
+  const wrap = document.getElementById('payment-input-wrap');
+  if (type === 'skip') { wrap.classList.remove('show'); }
+  else {
+    wrap.classList.add('show');
+    const ph = { stripe: 'Paste your Stripe payment link...', paypal: 'e.g. paypal.me/yourname', etransfer: 'Your e-transfer email address' };
+    document.getElementById('paymentInfo').placeholder = ph[type] || '';
+    document.getElementById('paymentInfo').focus();
+  }
+}
+function updatePreviewBasic() {
+  const clientName = document.getElementById('clientName').value;
+  const projectType = document.getElementById('projectType').value;
+  const budget = document.getElementById('budget').value;
+  const timeline = document.getElementById('timeline').value;
+  if (!clientName) return;
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('proposal-preview').style.display = 'block';
+  document.getElementById('prev-title').textContent = projectType ? projectType + ' proposal for ' + clientName : 'Proposal for ' + clientName;
+  document.getElementById('prev-type-chip').textContent = projectType || '—';
+  document.getElementById('prev-budget-chip').textContent = budget || '—';
+  document.getElementById('prev-timeline-chip').textContent = timeline || '—';
+}
+function updatePreview() { updatePreviewBasic(); }
+function showSkeleton() {
+  document.getElementById('proposal-body').innerHTML = `
+    <div class="skel" style="width:80%"></div><div class="skel" style="width:60%"></div>
+    <div class="skel" style="width:90%;margin-bottom:16px"></div>
+    <div class="skel" style="width:40%"></div><div class="skel" style="width:70%"></div>
+    <div class="skel" style="width:55%;margin-bottom:16px"></div>
+    <div class="skel" style="width:50%"></div><div class="skel" style="width:80%"></div>`;
+}
+function renderProposal(p, paymentInfo) {
+  document.getElementById('proposal-body').innerHTML = `<div class="prop-section-label">Overview</div><div class="prop-body">${p.greeting} ${p.intro}</div>`;
+  document.getElementById('generated-content').style.display = 'block';
+  document.getElementById('prev-scope').innerHTML = (p.scopeItems||[]).map(item=>`<div class="scope-item"><div class="scope-check"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>${item}</div>`).join('');
+  document.getElementById('prev-budget-table').innerHTML = (p.budgetBreakdown||[]).map(r=>`<tr><td style="color:#6b6860">${r.item}</td><td>${r.amount}</td></tr>`).join('')+`<tr><td>Total</td><td>${p.total}</td></tr>`;
+  if (paymentInfo) {
+    document.getElementById('prev-pay-block').style.display = 'block';
+    document.getElementById('prev-pay-title').textContent = `Pay deposit — ${p.depositAmount}`;
+    document.getElementById('prev-pay-sub').textContent = p.depositNote;
+    document.getElementById('prev-pay-link').href = paymentInfo.startsWith('http') ? paymentInfo : 'mailto:' + paymentInfo;
+    document.getElementById('prev-pay-link').textContent = paymentInfo.startsWith('http') ? 'Pay deposit now →' : 'Send e-transfer to ' + paymentInfo;
+  }
+  document.getElementById('preview-actions').style.display = 'flex';
+}
+async function generate() {
+  const clientName = document.getElementById('clientName').value.trim();
+  const projectType = document.getElementById('projectType').value.trim();
+  const budget = document.getElementById('budget').value;
+  const timeline = document.getElementById('timeline').value.trim();
+  const deliverables = document.getElementById('deliverables').value.trim();
+  const paymentInfo = document.getElementById('paymentInfo')?.value.trim();
+  if (!deliverables) { document.getElementById('deliverables').focus(); return; }
+  const btn = document.getElementById('generate-btn');
+  btn.classList.add('generating');
+  document.getElementById('generate-label').textContent = 'Writing your proposal...';
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('proposal-preview').style.display = 'block';
+  showSkeleton();
+  try {
+    const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ clientName, projectType, budget, timeline, deliverables, paymentInfo }) });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    generatedProposal = data.proposal;
+    renderProposal(data.proposal, paymentInfo);
+    document.getElementById('generate-label').textContent = 'Regenerate ↺';
+  } catch (e) {
+    document.getElementById('proposal-body').innerHTML = `<div class="prop-body" style="color:#dc2626">Something went wrong — please try again.</div>`;
+    document.getElementById('generate-label').textContent = 'Try again';
+  } finally {
+    btn.classList.remove('generating');
+  }
+}
+function copyLink() { alert('Link copied! (connect Supabase to make this real)'); }
+function downloadPDF() { alert('PDF download — connect api/pdf.js to enable'); }
+function sendProposal() { alert('Proposal sent! (connect Supabase to save & track)'); }
+updateProgress();
+</script>
+</body>
+</html>
