@@ -1,6 +1,7 @@
 {
   "name": "senditealready",
   "version": "1.0.0",
+  "type": "module",
   "description": "AI proposal generator for freelancers — SendItAlready.co",
   "scripts": {
     "dev": "vercel dev",

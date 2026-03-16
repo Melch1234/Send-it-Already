@@ -8,6 +8,7 @@
   },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    { "src": "/wizard", "dest": "/wizard.html" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }

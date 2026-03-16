@@ -102,9 +102,7 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
-    const filename = `proposal-${(clientName || "client").toLowerCase().replace(/\s+/g, "-")}.html`;
     res.setHeader("Content-Type", "text/html");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
     res.status(200).send(html);
   } catch (err) {
     console.error("PDF error:", err);
