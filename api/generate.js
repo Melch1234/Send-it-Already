@@ -7,14 +7,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { clientName, projectType, budget, timeline, deliverables, freelancerName, paymentInfo } = req.body;
+  const { clientName, projectType, budget, timeline, deliverables, freelancerName, paymentInfo, tone } = req.body;
 
   if (!clientName || !projectType || !budget || !timeline || !deliverables) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
-    const prompt = `You are a professional freelance proposal writer. Write a confident, warm, and compelling project proposal.
+    const toneDesc = {
+      professional: 'professional, polished and confident — authoritative but human',
+      friendly: 'warm, conversational and personable — like a trusted colleague who is also an expert',
+      bold: 'bold, direct and magnetic — highly confident, the kind of proposal that makes clients feel lucky to have this person'
+    }[tone || 'professional'];
+
+    const prompt = `You are a professional freelance proposal writer. Write a ${toneDesc} project proposal.
 
 Freelancer name: ${freelancerName || "the freelancer"}
 Client name: ${clientName}

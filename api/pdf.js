@@ -161,7 +161,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { proposal, clientName, projectType, budget, timeline, freelancerName, paymentInfo, template } = req.body;
+  const { proposal, clientName, projectType, budget, timeline, freelancerName, paymentInfo, template, expiry, logo } = req.body;
 
   if (!proposal) {
     return res.status(400).json({ error: "No proposal data provided" });
@@ -206,6 +206,7 @@ export default async function handler(req, res) {
 <body>
   <div class="header">
     <div class="orb1"></div><div class="orb2"></div>
+    ${logo ? `<img src="${logo}" style="height:44px;width:auto;object-fit:contain;max-width:140px;display:block;margin-bottom:14px;position:relative;" alt="Logo">` : ""}
     <div class="header-meta">
       <div>
         <div class="from-label">Proposal from</div>
@@ -222,6 +223,7 @@ export default async function handler(req, res) {
       ${budget ? `<span class="h-chip">${budget}</span>` : ""}
       ${timeline ? `<span class="h-chip">${timeline}</span>` : ""}
       <span class="h-chip">${date}</span>
+      ${expiry ? `<span class="h-chip">Valid until ${expiry}</span>` : ""}
     </div>
   </div>
 
