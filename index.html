@@ -4,257 +4,205 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SendItAlready — Win more clients</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Inter:wght@300;400;500;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0b09;
-  --bg2: #141310;
-  --bg3: #1c1a16;
-  --ink: #f5f2eb;
-  --ink2: #a09c93;
-  --ink3: #5a5750;
-  --accent: #e8c547;
-  --accent2: #d4a82a;
-  --green: #3ecf8e;
-  --red: #ff6b6b;
-  --border: rgba(255,255,255,0.07);
-  --radius: 16px;
+  --bg:       #FAF8F5;
+  --bg2:      #F2EFE9;
+  --dark:     #1A1A1A;
+  --dark2:    #2C2C2C;
+  --mid:      #4A4A4A;
+  --muted:    #7A7A7A;
+  --red:      #FF3C3C;
+  --red-dark: #CC2C2C;
+  --red-pale: rgba(255,60,60,0.08);
+  --gold:     #D4A574;
+  --gold-lt:  #E8C9A0;
+  --border:   rgba(26,26,26,0.1);
+  --radius:   14px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
-
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--dark);
   overflow-x: hidden;
-  cursor: none;
 }
 
-/* ── CUSTOM CURSOR ── */
-#cursor {
-  position: fixed; width: 10px; height: 10px;
-  background: var(--accent); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background 0.2s;
-  mix-blend-mode: difference;
-}
-#cursor-ring {
-  position: fixed; width: 36px; height: 36px;
-  border: 1px solid rgba(232,197,71,0.4); border-radius: 50%;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: all 0.12s ease;
-}
-body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; }
-
-/* ── NOISE OVERLAY ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 1000; opacity: 0.4;
-}
-
-/* ── NAV ── */
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 40px;
+  padding: 20px 60px;
+  background: rgba(250,248,245,0.92);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-  background: rgba(12,11,9,0.8);
 }
 .logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px; letter-spacing: 0.05em;
-  color: var(--ink);
-  display: flex; align-items: center; gap: 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 900;
+  color: var(--dark); letter-spacing: -0.01em;
 }
-.logo-mark {
-  width: 24px; height: 24px; background: var(--accent);
-  border-radius: 6px; display: flex; align-items: center;
-  justify-content: center;
-}
-.logo-mark svg { width: 12px; height: 12px; }
-.nav-links { display: flex; align-items: center; gap: 28px; }
+.logo span { color: var(--red); }
+.nav-links { display: flex; align-items: center; gap: 36px; }
 .nav-links a {
-  font-size: 13px; color: var(--ink2); text-decoration: none;
+  font-size: 13px; color: var(--muted);
+  text-decoration: none; letter-spacing: 0.01em;
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover { color: var(--dark); }
 .nav-cta {
-  font-size: 13px; font-weight: 500; padding: 10px 20px;
-  background: var(--accent); color: var(--bg);
-  border: none; border-radius: 8px; cursor: none;
-  font-family: 'DM Sans', sans-serif;
-  transition: transform 0.15s, background 0.15s;
+  font-size: 13px; font-weight: 600; padding: 11px 24px;
+  background: var(--red); color: #fff;
+  border: none; border-radius: 6px; cursor: pointer;
+  font-family: 'Inter', sans-serif; letter-spacing: 0.02em;
+  transition: background 0.2s, transform 0.15s;
 }
-.nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+.nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
 
-/* ── HERO ── */
+/* ═══════════════════════════════════════
+   SECTION 1 — HERO (DIAGONAL SPLIT)
+═══════════════════════════════════════ */
 .hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  justify-content: center;
-  padding: 120px 40px 80px;
+  height: 100vh; min-height: 700px;
   position: relative; overflow: hidden;
 }
 
-/* animated grid bg */
-.hero-grid {
-  position: absolute; inset: 0; opacity: 0.04;
-  background-image:
-    linear-gradient(var(--ink) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: grid-drift 20s linear infinite;
-}
-@keyframes grid-drift { to { background-position: 60px 60px; } }
-
-/* floating orbs */
-.orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(80px); pointer-events: none;
-  animation: float 8s ease-in-out infinite;
-}
-.orb1 { width: 400px; height: 400px; background: rgba(232,197,71,0.06); top: 10%; right: 5%; animation-delay: 0s; }
-.orb2 { width: 300px; height: 300px; background: rgba(62,207,142,0.04); bottom: 20%; left: 10%; animation-delay: 3s; }
-.orb3 { width: 200px; height: 200px; background: rgba(232,197,71,0.04); top: 50%; left: 30%; animation-delay: 6s; }
-@keyframes float {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-30px) scale(1.05); }
+/* Right side — warm white with proposal card */
+.hero-right-bg {
+  position: absolute; inset: 0;
+  background: var(--bg2);
 }
 
-.hero-content { position: relative; max-width: 900px; }
+/* Left dark shape */
+.hero-shape {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 62%;
+  background: var(--dark);
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  z-index: 2;
+}
 
-.hero-tag {
+/* SVG dashed line along the diagonal */
+.hero-diagonal {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+}
+
+/* Content — sits above the shape */
+.hero-content {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 55%;
+  z-index: 4;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 100px 72px 80px 80px;
+}
+
+.hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--border); border-radius: 99px;
-  padding: 6px 14px; margin-bottom: 28px;
-  font-size: 12px; color: var(--ink2);
-  animation: fadeUp 0.6s ease both;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 28px;
 }
-.hero-tag-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.hero-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--gold); }
 
 .hero-h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(72px, 12vw, 140px);
-  line-height: 0.92;
-  letter-spacing: 0.02em;
-  margin-bottom: 28px;
-  animation: fadeUp 0.6s 0.1s ease both;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 1.08; font-weight: 900;
+  color: #fff; margin-bottom: 24px;
+  letter-spacing: -0.02em;
 }
-.hero-h1 .line2 { color: var(--accent); display: block; }
-.hero-h1 .line3 { color: var(--ink2); display: block; font-size: 0.55em; }
+.hero-h1 em { font-style: italic; color: var(--red); display: block; }
 
 .hero-sub {
-  font-size: 18px; font-weight: 300; color: var(--ink2);
-  max-width: 480px; line-height: 1.65;
-  margin-bottom: 40px;
-  animation: fadeUp 0.6s 0.2s ease both;
+  font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.6);
+  line-height: 1.7; max-width: 400px; margin-bottom: 36px;
 }
 
-.hero-actions {
-  display: flex; align-items: center; gap: 16px;
-  animation: fadeUp 0.6s 0.3s ease both;
+.hero-form {
+  display: flex; gap: 0; max-width: 440px;
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  margin-bottom: 28px;
 }
-.btn-hero {
-  font-size: 15px; font-weight: 500; padding: 16px 32px;
-  background: var(--accent); color: var(--bg);
-  border: none; border-radius: 10px; cursor: none;
-  font-family: 'DM Sans', sans-serif;
-  display: flex; align-items: center; gap: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+.hero-input {
+  flex: 1; padding: 16px 20px;
+  background: #fff; border: none; outline: none;
+  font-size: 15px; font-family: 'Inter', sans-serif;
+  color: var(--dark);
 }
-.btn-hero:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,197,71,0.25); }
-.btn-hero-ghost {
-  font-size: 14px; color: var(--ink2);
-  background: none; border: 1px solid var(--border);
-  border-radius: 10px; padding: 16px 24px;
-  cursor: none; font-family: 'DM Sans', sans-serif;
-  transition: border-color 0.2s, color 0.2s;
+.hero-input::placeholder { color: #aaa; }
+.hero-btn {
+  padding: 16px 22px;
+  background: var(--red); color: #fff; border: none;
+  font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif;
+  cursor: pointer; white-space: nowrap; letter-spacing: 0.01em;
+  transition: background 0.2s;
 }
-.btn-hero-ghost:hover { border-color: var(--ink3); color: var(--ink); }
+.hero-btn:hover { background: var(--red-dark); }
 
 .hero-proof {
-  display: flex; align-items: center; gap: 12px; margin-top: 48px;
-  animation: fadeUp 0.6s 0.4s ease both;
+  display: flex; align-items: center; gap: 20px;
+  font-size: 12px; color: rgba(255,255,255,0.4);
 }
-.proof-avatars { display: flex; }
-.proof-av {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 2px solid var(--bg); margin-left: -8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 500; color: var(--bg);
-}
-.proof-text { font-size: 13px; color: var(--ink3); }
-.proof-text strong { color: var(--ink2); }
+.hero-proof-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); }
 
-/* floating proposal card */
-.hero-card {
-  position: absolute; right: 40px; top: 50%;
+/* Right: floating proposal card */
+.hero-card-wrap {
+  position: absolute; right: 6%; top: 50%;
   transform: translateY(-50%);
-  width: 340px;
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 20px; padding: 24px;
-  animation: fadeUp 0.8s 0.5s ease both, card-float 6s 1.5s ease-in-out infinite;
+  z-index: 5;
+  animation: card-float 6s ease-in-out infinite;
 }
 @keyframes card-float {
-  0%,100%{transform:translateY(-50%) rotate(-1deg)}
-  50%{transform:translateY(calc(-50% - 12px)) rotate(0.5deg)}
+  0%,100%{transform:translateY(-50%) rotate(-1.5deg)}
+  50%{transform:translateY(calc(-50% - 14px)) rotate(0.5deg)}
 }
-.card-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; }
-.card-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px; letter-spacing: 0.03em; margin-bottom: 16px;
-  color: var(--ink);
+.hero-card {
+  width: 320px;
+  background: #fff;
+  border-radius: 16px; padding: 28px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08);
 }
-.card-line {
-  height: 1px; background: var(--border); margin: 12px 0;
+.hc-label {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
 }
-.card-row {
-  display: flex; justify-content: space-between; align-items: center;
+.hc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 16px; line-height: 1.2;
+}
+.hc-line { height: 1px; background: var(--border); margin: 14px 0; }
+.hc-row {
+  display: flex; justify-content: space-between;
   font-size: 12px; margin-bottom: 8px;
 }
-.card-row-label { color: var(--ink3); }
-.card-row-val { color: var(--ink2); font-weight: 500; }
-.card-amount {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px; letter-spacing: 0.02em;
-  color: var(--accent); margin: 8px 0 4px;
+.hc-row-l { color: var(--muted); }
+.hc-row-r { color: var(--dark2); font-weight: 500; }
+.hc-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; font-weight: 900; color: var(--dark); line-height: 1; margin: 12px 0 4px;
 }
-.card-deposit { font-size: 11px; color: var(--ink3); }
-.card-pay-btn {
-  width: 100%; margin-top: 14px; padding: 12px;
-  background: var(--accent); color: var(--bg);
-  border: none; border-radius: 8px;
-  font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
-  cursor: none;
-}
-.card-badge {
+.hc-deposit { font-size: 11px; color: var(--muted); }
+.hc-badge {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 10px; padding: 3px 8px; border-radius: 4px;
-  background: rgba(62,207,142,0.1); color: var(--green);
-  border: 1px solid rgba(62,207,142,0.2);
+  font-size: 10px; padding: 3px 10px; border-radius: 4px;
+  background: rgba(255,60,60,0.08); color: var(--red);
+  border: 1px solid rgba(255,60,60,0.2); margin-top: 10px;
+  font-weight: 500;
+}
+.hc-btn {
+  display: block; width: 100%; margin-top: 14px; padding: 13px;
+  background: var(--red); color: #fff; border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;
+  text-align: center; cursor: pointer;
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── TICKER ── */
+/* ═══════════════════════════════════════
+   TICKER
+═══════════════════════════════════════ */
 .ticker {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -263,462 +211,894 @@ nav {
 }
 .ticker-inner {
   display: flex; white-space: nowrap;
-  animation: ticker 25s linear infinite;
+  animation: ticker 28s linear infinite;
 }
 .ticker-inner span {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 15px; letter-spacing: 0.08em;
-  color: var(--ink3); padding: 0 32px;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px; font-style: italic;
+  color: var(--muted); padding: 0 32px; letter-spacing: 0.01em;
 }
-.ticker-inner span em { color: var(--accent); font-style: normal; }
+.ticker-inner span em { color: var(--red); font-style: normal; }
 @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-/* ── HOW IT WORKS ── */
-.section { padding: 100px 40px; }
-.section-tag {
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 16px;
+/* ═══════════════════════════════════════
+   SECTION 2 — BROWSE BY FREELANCER TYPE
+═══════════════════════════════════════ */
+.types-section {
+  background: var(--bg);
+  padding: 120px 60px;
+}
+.section-header { margin-bottom: 64px; }
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--red); opacity: 0.25; max-width: 48px;
 }
 .section-h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(42px, 6vw, 72px);
-  line-height: 0.95; letter-spacing: 0.02em;
-  margin-bottom: 60px;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4vw, 60px);
+  font-weight: 900; line-height: 1.1;
+  color: var(--dark); letter-spacing: -0.02em;
 }
-.section-h2 span { color: var(--ink3); }
+.section-h2 em { font-style: italic; color: var(--red); }
 
-.steps-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
-.step-box {
-  background: var(--bg2); padding: 32px 28px;
-  border: 1px solid var(--border);
-  position: relative; overflow: hidden;
-  transition: background 0.3s;
-  cursor: default;
+.type-tile {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 36px 28px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
 }
-.step-box:first-child { border-radius: 16px 0 0 16px; }
-.step-box:last-child { border-radius: 0 16px 16px 0; }
-.step-box:hover { background: var(--bg3); }
-.step-box::before {
+.type-tile::before {
   content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: var(--accent); transform: scaleX(0);
-  transform-origin: left; transition: transform 0.4s ease;
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--red); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s ease;
 }
-.step-box:hover::before { transform: scaleX(1); }
-.step-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 64px; line-height: 1;
-  color: var(--border); margin-bottom: 16px;
-  transition: color 0.3s;
+.type-tile:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(255,60,60,0.1);
+  border-color: rgba(255,60,60,0.3);
 }
-.step-box:hover .step-num { color: var(--accent); }
-.step-title { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
-.step-desc { font-size: 13px; color: var(--ink3); line-height: 1.6; }
-.step-time {
-  display: inline-block; margin-top: 16px;
-  font-size: 11px; font-weight: 500; padding: 4px 10px;
-  border-radius: 99px; background: rgba(232,197,71,0.1);
-  color: var(--accent); border: 1px solid rgba(232,197,71,0.2);
+.type-tile:hover::before { transform: scaleX(1); }
+
+.tile-icon { margin-bottom: 20px; width: 56px; height: 56px; }
+.tile-icon svg { width: 56px; height: 56px; }
+.tile-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 6px;
+}
+.tile-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.tile-arrow {
+  position: absolute; right: 24px; bottom: 24px;
+  font-size: 18px; color: var(--red);
+  opacity: 0; transform: translate(-6px, 6px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.type-tile:hover .tile-arrow { opacity: 1; transform: translate(0, 0); }
+
+/* ═══════════════════════════════════════
+   SECTION 3 — POLAROID TESTIMONIALS
+═══════════════════════════════════════ */
+.polaroids-section {
+  background: var(--dark);
+  padding: 120px 60px;
+  position: relative; overflow: hidden;
+}
+.polaroids-section::before {
+  content: '';
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.polaroids-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 4.5vw, 68px);
+  font-weight: 900; line-height: 1.1;
+  color: #fff; letter-spacing: -0.02em; margin-bottom: 80px;
+}
+.polaroids-h2 em { font-style: italic; color: var(--red); }
+
+.polaroids-wrap {
+  display: flex; align-items: flex-start;
+  justify-content: center;
+  padding: 20px 0 40px; gap: 0;
+}
+.polaroid {
+  background: #fff; padding: 14px 14px 52px;
+  width: 290px; flex-shrink: 0;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.3);
+  transform: rotate(var(--rot, 0deg));
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+  cursor: pointer; position: relative; z-index: 1; margin: 0 -18px;
+}
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.07) translateY(-18px);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+.polaroid-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden; border-radius: 2px;
+}
+.polaroid-img.p1 { background: linear-gradient(145deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%); }
+.polaroid-img.p2 { background: linear-gradient(145deg, #059669 0%, #0891b2 50%, #6366f1 100%); }
+.polaroid-img.p3 { background: linear-gradient(145deg, #d97706 0%, #dc2626 50%, #7c3aed 100%); }
+.polaroid-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.polaroid-caption { padding: 10px 4px 0; }
+.pol-writing {
+  font-family: 'Caveat', cursive;
+  font-size: 18px; font-weight: 500;
+  color: var(--dark2); margin-bottom: 4px; line-height: 1.3;
+}
+.pol-role {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+  color: var(--red); text-transform: uppercase; margin-bottom: 6px;
+}
+.pol-quote {
+  font-size: 11px; color: #666; line-height: 1.55; font-style: italic;
 }
 
-/* ── INTERACTIVE DEMO ── */
-.demo-section {
-  padding: 80px 40px; background: var(--bg2);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+/* ═══════════════════════════════════════
+   SECTION 4 — HOW IT WORKS + DEMO
+═══════════════════════════════════════ */
+.how-section {
+  background: var(--bg);
+  padding: 120px 60px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
 }
-.demo-wrap {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
-  align-items: center; max-width: 1100px; margin: 0 auto;
+.how-left {}
+.how-steps { margin-top: 48px; }
+.how-step {
+  display: flex; gap: 20px; align-items: flex-start;
+  margin-bottom: 36px; position: relative;
 }
-.demo-left h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 52px; line-height: 0.95;
-  letter-spacing: 0.02em; margin-bottom: 16px;
+.how-step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--dark); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+  font-family: 'Playfair Display', serif; font-style: italic;
+  z-index: 1; position: relative;
 }
-.demo-left p { font-size: 15px; color: var(--ink2); line-height: 1.65; margin-bottom: 32px; }
+.how-step-num.red { background: var(--red); }
+.how-step-body {}
+.how-step-title {
+  font-size: 16px; font-weight: 600; color: var(--dark);
+  margin-bottom: 4px;
+}
+.how-step-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.how-step-badge {
+  display: inline-block; margin-top: 8px;
+  font-size: 11px; font-weight: 600; padding: 3px 10px;
+  border-radius: 99px; background: var(--red-pale);
+  color: var(--red); border: 1px solid rgba(255,60,60,0.2);
+}
 
-.typewriter-wrap {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 12px; padding: 20px 24px;
-  font-size: 14px; color: var(--ink2);
-  line-height: 1.7; min-height: 120px;
-  position: relative;
-}
-.typewriter-wrap::before {
-  content: 'AI is writing...';
-  position: absolute; top: 12px; right: 14px;
-  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink3);
-}
-#typewriter { color: var(--ink); }
-.cursor-blink {
-  display: inline-block; width: 2px; height: 14px;
-  background: var(--accent); margin-left: 2px;
-  vertical-align: middle; animation: blink 0.8s infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-.demo-controls {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
-}
-.demo-tag {
-  padding: 8px 16px; border-radius: 99px;
-  border: 1px solid var(--border); background: none;
-  font-size: 12px; color: var(--ink3); cursor: none;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-}
-.demo-tag:hover { border-color: var(--accent); color: var(--accent); }
-.demo-tag.active { background: rgba(232,197,71,0.1); border-color: var(--accent); color: var(--accent); }
-
-/* demo proposal output */
+/* demo proposal */
 .demo-proposal {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 20px; padding: 28px; position: relative;
-  overflow: hidden;
+  background: #fff; border-radius: 16px; padding: 28px;
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 60px rgba(0,0,0,0.08);
 }
-.demo-proposal::before {
-  content: 'Live proposal preview';
-  position: absolute; top: 16px; right: 16px;
+.dp-badge {
+  display: inline-flex; align-items: center; gap: 6px;
   font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink3);
+  color: var(--muted); margin-bottom: 16px;
 }
-.dp-client { font-size: 11px; color: var(--ink3); margin-bottom: 6px; letter-spacing: 0.05em; }
+.dp-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+.dp-client {
+  font-size: 10px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 6px;
+}
 .dp-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px; letter-spacing: 0.03em;
-  margin-bottom: 16px; transition: all 0.5s;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; color: var(--dark);
+  margin-bottom: 16px; transition: all 0.4s;
 }
-.dp-divider { height: 1px; background: var(--border); margin: 14px 0; }
-.dp-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
-.dp-row-l { color: var(--ink3); }
-.dp-row-r { color: var(--ink2); font-weight: 500; }
-.dp-total {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 42px; letter-spacing: 0.02em;
-  color: var(--accent); margin: 8px 0 4px;
-  transition: all 0.3s;
-}
-.dp-pay {
-  width: 100%; margin-top: 14px; padding: 12px;
-  background: var(--accent); color: var(--bg);
-  border: none; border-radius: 8px; font-size: 13px; font-weight: 500;
-  font-family: 'DM Sans', sans-serif; cursor: none;
-}
+.dp-divider { height: 1px; background: var(--border); margin: 12px 0; }
 .scope-items { margin: 10px 0; }
 .scope-i {
   display: flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--ink2); margin-bottom: 6px;
+  font-size: 12px; color: var(--dark2); margin-bottom: 6px;
 }
-.scope-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.scope-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.dp-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+.dp-row-l { color: var(--muted); }
+.dp-row-r { color: var(--dark2); font-weight: 500; }
+.dp-total {
+  font-family: 'Playfair Display', serif;
+  font-size: 44px; font-weight: 900; color: var(--dark);
+  line-height: 1; margin: 12px 0 4px; transition: all 0.3s;
+}
+.dp-invest { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+.dp-pay {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 16px; background: var(--red); color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;
+  cursor: pointer; width: 100%; text-align: left;
+}
+.dp-lock {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--muted); margin-top: 10px;
+}
+.dp-lock svg { width: 12px; height: 12px; }
 
-/* budget slider demo */
-.budget-demo-wrap { margin-top: 20px; }
-.budget-demo-label { font-size: 12px; color: var(--ink3); margin-bottom: 8px; }
-.budget-demo-val {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px; color: var(--accent); margin-bottom: 8px;
+/* typewriter */
+.typewriter-wrap {
+  background: var(--bg2); border-radius: 10px; padding: 18px 20px;
+  font-size: 13px; color: var(--dark2); line-height: 1.7;
+  min-height: 100px; margin-bottom: 16px; border: 1px solid var(--border);
+  position: relative;
 }
-input[type=range] {
-  width: 100%; accent-color: var(--accent);
-  cursor: none;
+.typewriter-wrap::before {
+  content: 'AI writing...';
+  position: absolute; top: 12px; right: 14px;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.cursor-blink {
+  display: inline-block; width: 2px; height: 13px;
+  background: var(--red); margin-left: 1px;
+  vertical-align: middle; animation: blink 0.8s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+.demo-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-tag {
+  padding: 7px 14px; border-radius: 99px;
+  border: 1.5px solid var(--border); background: none;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all 0.15s;
+}
+.demo-tag:hover { border-color: var(--red); color: var(--red); }
+.demo-tag.active {
+  background: var(--red-pale); border-color: var(--red); color: var(--red);
 }
 
-/* ── PRICING ── */
-.pricing-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  max-width: 700px;
-}
-.price-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 20px; padding: 32px;
-  transition: border-color 0.3s;
-}
-.price-card:hover { border-color: var(--ink3); }
-.price-card.featured {
-  border-color: var(--accent);
-  background: linear-gradient(135deg, rgba(232,197,71,0.05) 0%, var(--bg2) 100%);
-}
-.price-badge {
-  display: inline-block; font-size: 11px; font-weight: 500;
-  padding: 4px 12px; border-radius: 99px;
-  background: var(--accent); color: var(--bg);
-  margin-bottom: 16px;
-}
-.price-name { font-size: 14px; color: var(--ink3); margin-bottom: 8px; }
-.price-amount {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 56px; line-height: 1; letter-spacing: 0.02em;
-  margin-bottom: 4px;
-}
-.price-period { font-size: 13px; color: var(--ink3); margin-bottom: 24px; }
-.price-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-.pf {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 13px; color: var(--ink2);
-}
-.pf-check { color: var(--green); font-size: 14px; flex-shrink: 0; }
-.pf-x { color: var(--ink3); font-size: 14px; flex-shrink: 0; }
-.price-btn {
-  width: 100%; padding: 14px; border-radius: 10px;
-  font-size: 14px; font-weight: 500; cursor: none;
-  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
-}
-.price-btn.primary {
-  background: var(--accent); color: var(--bg); border: none;
-}
-.price-btn.primary:hover { background: var(--accent2); transform: translateY(-1px); }
-.price-btn.ghost {
-  background: none; color: var(--ink2);
-  border: 1px solid var(--border);
-}
-.price-btn.ghost:hover { border-color: var(--ink3); color: var(--ink); }
-
-/* ── TESTIMONIALS ── */
-.testi-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-}
-.testi-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 16px; padding: 24px;
-  transition: transform 0.3s, border-color 0.3s;
-}
-.testi-card:hover { transform: translateY(-4px); border-color: var(--ink3); }
-.testi-stars { color: var(--accent); font-size: 13px; margin-bottom: 14px; letter-spacing: 2px; }
-.testi-quote {
-  font-size: 14px; font-weight: 300; font-style: italic;
-  color: var(--ink2); line-height: 1.7; margin-bottom: 16px;
-}
-.testi-author { display: flex; align-items: center; gap: 10px; }
-.testi-av {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 500; color: var(--bg); flex-shrink: 0;
-}
-.testi-name { font-size: 13px; font-weight: 500; color: var(--ink); }
-.testi-role { font-size: 11px; color: var(--ink3); }
-
-/* ── CTA ── */
-.cta-section {
-  padding: 120px 40px; text-align: center;
+/* ═══════════════════════════════════════
+   SECTION 5 — AI PERSONALITY
+═══════════════════════════════════════ */
+.ai-section {
+  background: var(--dark2);
+  padding: 140px 60px;
   position: relative; overflow: hidden;
 }
-.cta-section::before {
+.ai-section::before {
   content: '';
-  position: absolute; top: 50%; left: 50%;
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(232,197,71,0.06) 0%, transparent 70%);
-  transform: translate(-50%, -50%);
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events: none;
 }
-.cta-section h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(52px, 9vw, 110px);
-  line-height: 0.92; letter-spacing: 0.02em;
-  margin-bottom: 20px;
+.ai-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  max-width: 1200px; margin: 0 auto;
 }
-.cta-section h2 span { color: var(--accent); display: block; }
-.cta-section p { font-size: 16px; color: var(--ink3); margin-bottom: 40px; }
-.cta-btns { display: flex; justify-content: center; gap: 14px; }
+.ai-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ai-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--red); }
+.ai-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 3.5vw, 54px);
+  font-weight: 900; font-style: italic;
+  line-height: 1.15; color: var(--red);
+  margin-bottom: 28px; letter-spacing: -0.01em;
+}
+.ai-quote em { color: #fff; font-style: normal; }
+.ai-sub {
+  font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 36px;
+}
+.ai-try-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 600; padding: 14px 28px;
+  background: var(--red); color: #fff; border: none; border-radius: 6px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: background 0.2s, transform 0.15s;
+}
+.ai-try-btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+.ai-try-btn svg { width: 16px; height: 16px; }
 
-/* ── FOOTER ── */
+/* chat */
+.ai-chat {
+  background: #111;
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+}
+.chat-topbar {
+  background: #1a1a1a; padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.chat-dots { display: flex; gap: 6px; }
+.chat-dot { width: 10px; height: 10px; border-radius: 50%; }
+.chat-label {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); margin-left: 8px;
+}
+.chat-status {
+  margin-left: auto; display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: #22c55e;
+}
+.chat-status-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
+  animation: pulse 2s infinite;
+}
+.chat-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.chat-msg { max-width: 82%; }
+.chat-msg.user { align-self: flex-end; }
+.bubble {
+  padding: 11px 15px; border-radius: 12px;
+  font-size: 13px; line-height: 1.55;
+}
+.user .bubble { background: var(--red); color: #fff; border-radius: 12px 12px 3px 12px; }
+.ai .bubble { background: #222; color: rgba(255,255,255,0.85); border-radius: 12px 12px 12px 3px; }
+.msg-name {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 5px;
+}
+.ai-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(255,60,60,0.12); color: var(--red);
+  border: 1px solid rgba(255,60,60,0.25);
+  border-radius: 99px; padding: 2px 10px;
+  font-size: 11px; font-weight: 500;
+  margin-top: 8px; margin-right: 5px;
+}
+.chat-input-row {
+  padding: 14px 18px; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; gap: 10px; align-items: center;
+}
+.chat-input {
+  flex: 1; background: #222; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px; padding: 10px 16px;
+  font-size: 13px; font-family: 'Inter', sans-serif; color: #fff; outline: none;
+}
+.chat-input::placeholder { color: rgba(255,255,255,0.25); }
+.chat-send-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--red); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.chat-send-btn:hover { background: var(--red-dark); }
+.chat-send-btn svg { width: 14px; height: 14px; }
+
+/* ═══════════════════════════════════════
+   SECTION 6 — PRICING (HONEST)
+═══════════════════════════════════════ */
+.pricing-section {
+  background: var(--bg);
+  padding: 120px 60px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; align-items: center;
+}
+.pricing-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 3.5vw, 54px);
+  font-weight: 900; line-height: 1.1;
+  color: var(--dark); margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.pricing-h2 em { font-style: italic; color: var(--red); }
+.pricing-honest {
+  font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 16px;
+}
+.pricing-honest strong { color: var(--dark); }
+.pricing-model-note {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--red-pale); border: 1px solid rgba(255,60,60,0.2);
+  border-radius: 10px; padding: 16px 18px; margin-top: 28px;
+  font-size: 13px; color: var(--dark); line-height: 1.6;
+}
+.pricing-model-note strong { color: var(--red); }
+
+/* Pricing card */
+.pricing-card {
+  background: var(--dark); border-radius: 20px; padding: 44px 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.1);
+  position: relative; overflow: hidden;
+}
+.pricing-card::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: rgba(255,255,255,0.02);
+}
+.pc-free {
+  background: rgba(255,60,60,0.1); border: 1px solid rgba(255,60,60,0.2);
+  border-radius: 8px; padding: 14px 16px; margin-bottom: 24px;
+}
+.pc-free-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 8px;
+}
+.pc-free-items { display: flex; flex-direction: column; gap: 5px; }
+.pc-free-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: rgba(255,255,255,0.75);
+}
+.pc-free-check { color: var(--red); font-size: 12px; }
+.pc-divider {
+  height: 1px; background: rgba(255,255,255,0.08); margin: 20px 0;
+}
+.pc-price-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+}
+.pc-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 80px; font-weight: 900;
+  color: #fff; line-height: 1; margin-bottom: 4px;
+}
+.pc-price sup {
+  font-size: 34px; vertical-align: top; margin-top: 14px;
+  display: inline-block; color: var(--gold-lt);
+}
+.pc-per { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+.pc-includes { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+.pc-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5;
+}
+.pc-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,60,60,0.15); border: 1px solid rgba(255,60,60,0.3);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.pc-check svg { width: 10px; height: 10px; }
+.pc-cta {
+  display: block; width: 100%; padding: 16px;
+  background: var(--red); color: #fff; border: none; border-radius: 8px;
+  font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif;
+  cursor: pointer; text-align: center; text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.pc-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+.pc-fine {
+  font-size: 11px; color: rgba(255,255,255,0.3); text-align: center;
+  margin-top: 12px; line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER CTA
+═══════════════════════════════════════ */
+.footer-cta {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 120px 60px; text-align: center;
+}
+.footer-cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 9vw, 110px);
+  line-height: 0.92; letter-spacing: -0.02em;
+  font-weight: 900; color: var(--dark);
+  margin-bottom: 28px;
+}
+.footer-cta h2 em { font-style: italic; color: var(--red); display: block; }
+.footer-cta p { font-size: 16px; color: var(--muted); margin-bottom: 40px; }
+.footer-cta-btns { display: flex; justify-content: center; gap: 14px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 15px; font-weight: 600; padding: 16px 32px;
+  background: var(--red); color: #fff; border: none; border-radius: 8px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,60,60,0.3); }
+.btn-ghost {
+  font-size: 14px; color: var(--muted); background: none;
+  border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 24px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--dark2); color: var(--dark); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
 footer {
-  padding: 32px 40px; border-top: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
+  background: var(--dark);
+  padding: 48px 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
 }
 .footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px; color: var(--ink3); letter-spacing: 0.05em;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 900; color: #fff;
 }
-.footer-copy { font-size: 12px; color: var(--ink3); }
-
-/* ── SCROLL REVEAL ── */
-.reveal {
-  opacity: 0; transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+.footer-logo span { color: var(--red); }
+.footer-tagline { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; font-style: italic; }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a {
+  font-size: 13px; color: rgba(255,255,255,0.45);
+  text-decoration: none; transition: color 0.2s;
 }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.footer-links a:hover { color: var(--red); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
 
+/* ═══════════════════════════════════════
+   MOBILE
+═══════════════════════════════════════ */
 @media (max-width: 900px) {
-  .hero-card { display: none; }
-  .steps-grid { grid-template-columns: 1fr 1fr; }
-  .demo-wrap { grid-template-columns: 1fr; }
-  .testi-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
-  nav { padding: 16px 20px; }
-  .hero { padding: 100px 20px 60px; }
-  .section { padding: 60px 20px; }
-  body { cursor: auto; }
-  #cursor, #cursor-ring { display: none; }
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+
+  .hero-content { width: 100%; padding: 100px 24px 60px; }
+  .hero-shape { width: 100%; clip-path: polygon(0 0, 100% 0, 100% 70%, 0 88%); }
+  .hero-card-wrap { display: none; }
+  .hero-h1 { font-size: 40px; }
+  .hero-form { flex-direction: column; border-radius: 10px; overflow: visible; box-shadow: none; }
+  .hero-input { border-radius: 8px; border: 1.5px solid var(--border); }
+  .hero-btn { border-radius: 8px; width: 100%; }
+
+  .types-section { padding: 80px 24px; }
+  .types-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .type-tile { padding: 24px 18px; }
+  .tile-name { font-size: 18px; }
+
+  .polaroids-section { padding: 80px 24px; }
+  .polaroids-wrap { flex-direction: column; align-items: center; }
+  .polaroid { margin: 0 0 16px; transform: none !important; width: 280px; }
+
+  .how-section { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+
+  .ai-section { padding: 80px 24px; }
+  .ai-inner { grid-template-columns: 1fr; gap: 48px; }
+
+  .pricing-section { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+
+  .footer-cta { padding: 80px 24px; }
+  .footer-cta h2 { font-size: 52px; }
+  .footer-cta-btns { flex-direction: column; align-items: center; }
+
+  footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+  .footer-links { flex-wrap: wrap; gap: 18px; }
+}
+
+@media (max-width: 560px) {
+  .types-grid { grid-template-columns: 1fr; }
+  .hero-h1 { font-size: 36px; }
 }
 </style>
 </head>
 <body>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
 <!-- NAV -->
 <nav>
-  <div class="logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 12 12" fill="none"><path d="M2 10L6 2L10 10M3.5 7.5H8.5" stroke="#0c0b09" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </div>
-    SendItAlready
-  </div>
+  <div class="logo">Send<span>It</span>Already</div>
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
     <a href="wizard.html">Try it free</a>
   </div>
-  <button class="nav-cta" onclick="window.location='wizard.html'">Start for free →</button>
+  <button class="nav-cta" onclick="window.location='wizard.html'">Generate free →</button>
 </nav>
 
-<!-- HERO -->
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — HERO: DIAGONAL SPLIT
+══════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-grid"></div>
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
+  <div class="hero-right-bg"></div>
+  <div class="hero-shape"></div>
+
+  <!-- Dashed diagonal line -->
+  <svg class="hero-diagonal" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="893" y1="0" x2="605" y2="900"
+      stroke="#D4A574" stroke-width="2.5"
+      stroke-dasharray="16,11" stroke-linecap="round" opacity="0.6"/>
+    <line x1="877" y1="0" x2="589" y2="900"
+      stroke="rgba(255,255,255,0.06)" stroke-width="1.5"
+      stroke-dasharray="5,18" stroke-linecap="round"/>
+    <g stroke="#D4A574" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.45">
+      <polyline points="855,170 865,192 875,170"/>
+      <polyline points="805,370 815,392 825,370"/>
+      <polyline points="755,570 765,592 775,570"/>
+      <polyline points="705,760 715,782 725,760"/>
+    </g>
+  </svg>
 
   <div class="hero-content">
-    <div class="hero-tag">
-      <div class="hero-tag-dot"></div>
-      400+ freelancers sending proposals today
-    </div>
+    <div class="hero-eyebrow">AI proposal writer for freelancers</div>
     <h1 class="hero-h1">
-      Stop writing.<br>
-      <span class="line2">Start winning.</span>
-      <span class="line3">Proposals in 60 seconds.</span>
+      Stop losing clients<br>
+      <em>to bad proposals.</em>
     </h1>
     <p class="hero-sub">
-      Answer 5 questions. Get a gorgeous, professional proposal with a payment link built in. Your client reads it, signs it, pays — all in one place.
+      Answer 5 questions. Get a polished, professional proposal with a payment link built in — in under 2 minutes.
     </p>
-    <div class="hero-actions">
-      <button class="btn-hero" onclick="window.location='wizard.html'">
-        Build my first proposal
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="btn-hero-ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
+    <div class="hero-form">
+      <input class="hero-input" type="text" placeholder="What kind of project is it?">
+      <button class="hero-btn" onclick="window.location='wizard.html'">Generate free →</button>
     </div>
     <div class="hero-proof">
-      <div class="proof-avatars">
-        <div class="proof-av" style="background:#4f46e5">SR</div>
-        <div class="proof-av" style="background:#16a34a">KL</div>
-        <div class="proof-av" style="background:#e8c547; color:#0c0b09">AP</div>
-        <div class="proof-av" style="background:#db2777">MJ</div>
-      </div>
-      <div class="proof-text"><strong>Saved 3+ hours</strong> this week alone</div>
+      <span>Generate free</span>
+      <div class="hero-proof-dot"></div>
+      <span>Pay $19/mo to send</span>
+      <div class="hero-proof-dot"></div>
+      <span>No card to start</span>
     </div>
   </div>
 
-  <!-- floating card -->
-  <div class="hero-card">
-    <div class="card-label">Proposal · Website redesign</div>
-    <div class="card-title">ACME MARKETING CO.</div>
-    <div class="card-row">
-      <span class="card-row-label">Timeline</span>
-      <span class="card-row-val">4 weeks</span>
+  <!-- Floating proposal card -->
+  <div class="hero-card-wrap">
+    <div class="hero-card">
+      <div class="hc-label">Proposal · Brand photography</div>
+      <div class="hc-title">Acme Marketing Co.</div>
+      <div class="hc-line"></div>
+      <div class="hc-row">
+        <span class="hc-row-l">Timeline</span>
+        <span class="hc-row-r">Half-day shoot</span>
+      </div>
+      <div class="hc-row">
+        <span class="hc-row-l">Deliverables</span>
+        <span class="hc-row-r">50 edited images</span>
+      </div>
+      <div class="hc-line"></div>
+      <div class="hc-amount">$3,200</div>
+      <div class="hc-deposit">50% deposit · $1,600 to start</div>
+      <div class="hc-badge">✓ Viewed 4 minutes ago</div>
+      <button class="hc-btn">Pay $1,600 deposit →</button>
     </div>
-    <div class="card-row">
-      <span class="card-row-label">Deliverables</span>
-      <span class="card-row-val">6-page site + CMS</span>
-    </div>
-    <div class="card-line"></div>
-    <div class="card-amount">$5,000</div>
-    <div class="card-deposit">50% deposit · $2,500 to start</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-      <div class="card-badge">✓ Viewed 2 min ago</div>
-    </div>
-    <button class="card-pay-btn">Pay $2,500 deposit →</button>
   </div>
 </section>
+
 
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-inner" id="ticker-inner">
     <span>Win more clients <em>✦</em></span>
-    <span>Proposals in 60 seconds <em>✦</em></span>
+    <span>Proposals in 2 minutes <em>✦</em></span>
     <span>Get paid faster <em>✦</em></span>
     <span>Look like a pro <em>✦</em></span>
     <span>No more Word docs <em>✦</em></span>
+    <span>Generate free <em>✦</em></span>
     <span>Win more clients <em>✦</em></span>
-    <span>Proposals in 60 seconds <em>✦</em></span>
+    <span>Proposals in 2 minutes <em>✦</em></span>
     <span>Get paid faster <em>✦</em></span>
     <span>Look like a pro <em>✦</em></span>
     <span>No more Word docs <em>✦</em></span>
-    <span>Win more clients <em>✦</em></span>
-    <span>Proposals in 60 seconds <em>✦</em></span>
-    <span>Get paid faster <em>✦</em></span>
-    <span>Look like a pro <em>✦</em></span>
-    <span>No more Word docs <em>✦</em></span>
+    <span>Generate free <em>✦</em></span>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<section class="section" id="how">
-  <div class="section-tag reveal">The process</div>
-  <h2 class="section-h2 reveal">Four steps. <span>Zero stress.</span></h2>
-  <div class="steps-grid reveal">
-    <div class="step-box">
-      <div class="step-num">01</div>
-      <div class="step-title">Answer 5 questions</div>
-      <div class="step-desc">Client name, project type, budget, timeline, deliverables. That's it. Seriously.</div>
-      <div class="step-time">90 seconds</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — BROWSE BY FREELANCER TYPE
+══════════════════════════════════════════ -->
+<section class="types-section">
+  <div class="section-header">
+    <div class="section-label">Built for every freelancer</div>
+    <h2 class="section-h2">What kind of work<br>do <em>you</em> do?</h2>
+  </div>
+
+  <div class="types-grid">
+
+    <!-- Web Designer -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="10" width="44" height="30" rx="4" fill="rgba(255,60,60,0.08)" stroke="#FF3C3C" stroke-width="2"/>
+          <rect x="10" y="14" width="36" height="22" rx="2" fill="rgba(255,60,60,0.06)"/>
+          <line x1="10" y1="20" x2="46" y2="20" stroke="#FF3C3C" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="14" cy="17" r="2" fill="#FF3C3C" opacity="0.6"/>
+          <circle cx="20" cy="17" r="2" fill="#FF3C3C" opacity="0.4"/>
+          <circle cx="26" cy="17" r="2" fill="#FF3C3C" opacity="0.3"/>
+          <rect x="12" y="24" width="14" height="3" rx="1.5" fill="#FF3C3C" opacity="0.3"/>
+          <rect x="12" y="29" width="22" height="2" rx="1" fill="#FF3C3C" opacity="0.2"/>
+          <rect x="12" y="33" width="18" height="2" rx="1" fill="#FF3C3C" opacity="0.2"/>
+          <rect x="20" y="40" width="16" height="6" rx="2" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="tile-name">Web Designer</div>
+      <div class="tile-sub">Websites · Landing pages · Webflow · WordPress</div>
+      <div class="tile-arrow">→</div>
     </div>
-    <div class="step-box">
-      <div class="step-num">02</div>
-      <div class="step-title">AI writes it for you</div>
-      <div class="step-desc">Professional scope, pricing breakdown, process steps — written by AI, sounding like you at your best.</div>
-      <div class="step-time">Instant</div>
+
+    <!-- Photographer -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="16" width="44" height="30" rx="5" fill="rgba(255,60,60,0.08)" stroke="#FF3C3C" stroke-width="2"/>
+          <path d="M16 16 L20 10 L36 10 L40 16" stroke="#FF3C3C" stroke-width="2" stroke-linejoin="round" fill="rgba(255,60,60,0.1)"/>
+          <circle cx="28" cy="31" r="9" fill="rgba(255,60,60,0.1)" stroke="#FF3C3C" stroke-width="2"/>
+          <circle cx="28" cy="31" r="5" fill="rgba(255,60,60,0.2)"/>
+          <circle cx="28" cy="31" r="2" fill="#FF3C3C"/>
+          <circle cx="38" cy="21" r="2.5" fill="rgba(255,60,60,0.5)"/>
+        </svg>
+      </div>
+      <div class="tile-name">Photographer</div>
+      <div class="tile-sub">Brand shoots · Portraits · Events · Commercial</div>
+      <div class="tile-arrow">→</div>
     </div>
-    <div class="step-box">
-      <div class="step-num">03</div>
-      <div class="step-title">Add your payment link</div>
-      <div class="step-desc">Stripe, PayPal, e-transfer — paste it once, it's on every proposal forever. Clients pay without leaving the page.</div>
-      <div class="step-time">10 seconds</div>
+
+    <!-- Copywriter -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="36" height="42" rx="4" fill="rgba(255,60,60,0.06)" stroke="#FF3C3C" stroke-width="2"/>
+          <line x1="16" y1="18" x2="40" y2="18" stroke="#FF3C3C" stroke-width="2" stroke-linecap="round"/>
+          <line x1="16" y1="24" x2="40" y2="24" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="16" y1="30" x2="36" y2="30" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="16" y1="36" x2="38" y2="36" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="16" y1="42" x2="30" y2="42" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+          <rect x="33" y="39" width="3" height="8" rx="1" fill="#FF3C3C" transform="rotate(-30 33 39)"/>
+        </svg>
+      </div>
+      <div class="tile-name">Copywriter</div>
+      <div class="tile-sub">Web copy · Emails · Scripts · Brand voice</div>
+      <div class="tile-arrow">→</div>
     </div>
-    <div class="step-box">
-      <div class="step-num">04</div>
-      <div class="step-title">Send & get paid</div>
-      <div class="step-desc">One link. Client opens it, reads it, signs off, and pays the deposit. You get a notification. Done.</div>
-      <div class="step-time">You win</div>
+
+    <!-- Video Editor -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="12" width="34" height="26" rx="4" fill="rgba(255,60,60,0.08)" stroke="#FF3C3C" stroke-width="2"/>
+          <path d="M40 20 L50 15 L50 35 L40 30 Z" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="2" stroke-linejoin="round"/>
+          <line x1="6" y1="42" x2="50" y2="42" stroke="rgba(255,60,60,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <rect x="10" y="44" width="8" height="4" rx="1" fill="#FF3C3C" opacity="0.5"/>
+          <rect x="22" y="44" width="14" height="4" rx="1" fill="#FF3C3C" opacity="0.3"/>
+          <rect x="40" y="44" width="5" height="4" rx="1" fill="#FF3C3C" opacity="0.5"/>
+          <circle cx="23" cy="25" r="6" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <path d="M21 22 L27 25 L21 28 Z" fill="#FF3C3C"/>
+        </svg>
+      </div>
+      <div class="tile-name">Video Editor</div>
+      <div class="tile-sub">Brand films · Social cuts · YouTube · Reels</div>
+      <div class="tile-arrow">→</div>
     </div>
+
+    <!-- Brand Designer -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="28,6 40,18 40,38 28,50 16,38 16,18" fill="rgba(255,60,60,0.08)" stroke="#FF3C3C" stroke-width="2"/>
+          <polygon points="28,14 36,22 36,34 28,42 20,34 20,22" fill="rgba(255,60,60,0.06)" stroke="#FF3C3C" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="28" cy="28" r="5" fill="rgba(255,60,60,0.3)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <line x1="28" y1="6" x2="28" y2="14" stroke="#FF3C3C" stroke-width="1.5" opacity="0.4"/>
+          <line x1="28" y1="42" x2="28" y2="50" stroke="#FF3C3C" stroke-width="1.5" opacity="0.4"/>
+          <line x1="16" y1="18" x2="20" y2="22" stroke="#FF3C3C" stroke-width="1.5" opacity="0.4"/>
+          <line x1="40" y1="38" x2="36" y2="34" stroke="#FF3C3C" stroke-width="1.5" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="tile-name">Brand Designer</div>
+      <div class="tile-sub">Logos · Identity systems · Guidelines · Strategy</div>
+      <div class="tile-arrow">→</div>
+    </div>
+
+    <!-- Social Media Manager -->
+    <div class="type-tile" onclick="window.location='wizard.html'">
+      <div class="tile-icon">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="20" fill="rgba(255,60,60,0.06)" stroke="#FF3C3C" stroke-width="2"/>
+          <circle cx="16" cy="22" r="5" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <circle cx="40" cy="22" r="5" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <circle cx="28" cy="38" r="5" fill="rgba(255,60,60,0.15)" stroke="#FF3C3C" stroke-width="1.5"/>
+          <line x1="20.5" y1="24.5" x2="35.5" y2="24.5" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="20" y1="26" x2="25" y2="34" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="36" y1="26" x2="31" y2="34" stroke="#FF3C3C" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="tile-name">Social Media Manager</div>
+      <div class="tile-sub">Content strategy · Scheduling · Growth · Ads</div>
+      <div class="tile-arrow">→</div>
+    </div>
+
   </div>
 </section>
 
-<!-- INTERACTIVE DEMO -->
-<div class="demo-section" id="demo">
-  <div class="demo-wrap">
-    <div class="demo-left reveal">
-      <div class="section-tag">Try it right now</div>
-      <h2>Watch it write <br>your proposal</h2>
-      <p>Pick a project type below and watch the AI write a real proposal intro in real time. This is exactly what happens when you hit generate.</p>
 
-      <div class="typewriter-wrap">
-        <span id="typewriter"></span><span class="cursor-blink"></span>
-      </div>
-      <div class="demo-controls">
-        <button class="demo-tag active" onclick="runDemo(this,'website')">Website design</button>
-        <button class="demo-tag" onclick="runDemo(this,'branding')">Branding</button>
-        <button class="demo-tag" onclick="runDemo(this,'photo')">Photography</button>
-        <button class="demo-tag" onclick="runDemo(this,'copy')">Copywriting</button>
-        <button class="demo-tag" onclick="runDemo(this,'video')">Video editing</button>
-      </div>
+<!-- ══════════════════════════════════════════
+     SECTION 3 — POLAROID TESTIMONIALS
+══════════════════════════════════════════ -->
+<section class="polaroids-section">
+  <div class="section-label" style="color:var(--gold);margin-bottom:16px">From the community</div>
+  <h2 class="polaroids-h2">Real freelancers. <em>Real wins.</em></h2>
 
-      <div class="budget-demo-wrap">
-        <div class="budget-demo-label">Drag to change the budget:</div>
-        <div class="budget-demo-val" id="demo-budget-val">$5,000</div>
-        <input type="range" min="500" max="20000" step="500" value="5000" oninput="updateDemoBudget(this.value)">
+  <div class="polaroids-wrap">
+
+    <div class="polaroid" style="--rot:-4deg">
+      <div class="polaroid-img p1"></div>
+      <div class="polaroid-caption">
+        <div class="pol-writing">Deposit paid in 20 mins</div>
+        <div class="pol-role">Sarah R. · Web designer · Vancouver</div>
+        <div class="pol-quote">"I used to spend half my Sunday writing proposals. Now it takes 2 minutes and clients actually comment on how professional they look."</div>
       </div>
     </div>
 
-    <div class="demo-proposal reveal">
-      <div class="dp-client">PROPOSAL FOR</div>
+    <div class="polaroid" style="--rot:2.5deg;margin-top:44px">
+      <div class="polaroid-img p2"></div>
+      <div class="polaroid-caption">
+        <div class="pol-writing">Close rate went way up</div>
+        <div class="pol-role">Kyle L. · Photographer · Austin</div>
+        <div class="pol-quote">"Got a deposit paid within 20 minutes of sending my first proposal. That never happened with my old PDF + PayPal setup."</div>
+      </div>
+    </div>
+
+    <div class="polaroid" style="--rot:-2deg;margin-top:-24px">
+      <div class="polaroid-img p3"></div>
+      <div class="polaroid-caption">
+        <div class="pol-writing">Clients just... trust me more</div>
+        <div class="pol-role">Maya J. · Copywriter · London</div>
+        <div class="pol-quote">"My close rate went up noticeably. I think it's the polish — clients trust me before we even jump on a call."</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — HOW IT WORKS + LIVE DEMO
+══════════════════════════════════════════ -->
+<section class="how-section" id="how">
+
+  <div class="how-left">
+    <div class="section-label">The process</div>
+    <h2 class="section-h2">Four steps.<br><em>Zero stress.</em></h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <div class="how-step-body">
+          <div class="how-step-title">Answer 5 quick questions</div>
+          <div class="how-step-desc">Client name, project type, budget, timeline, deliverables. 90 seconds.</div>
+          <span class="how-step-badge">Always free</span>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num red">2</div>
+        <div class="how-step-body">
+          <div class="how-step-title">AI writes the proposal instantly</div>
+          <div class="how-step-desc">Professional scope, pricing breakdown, process steps — sounding like you at your best.</div>
+          <span class="how-step-badge">Always free</span>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <div class="how-step-body">
+          <div class="how-step-title">Unlock & send for $19/month</div>
+          <div class="how-step-desc">PDF download, your logo, payment link built in, client e-signature, proposal tracking.</div>
+          <span class="how-step-badge">Pro — $19/month</span>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num red">4</div>
+        <div class="how-step-body">
+          <div class="how-step-title">Client reads, signs, pays</div>
+          <div class="how-step-desc">One link. Client opens it, reviews, signs off, pays the deposit. You get notified. Done.</div>
+          <span class="how-step-badge">You win</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-right">
+    <div class="typewriter-wrap">
+      <span id="typewriter"></span><span class="cursor-blink"></span>
+    </div>
+    <div class="demo-controls" style="margin-bottom:24px">
+      <button class="demo-tag active" onclick="runDemo(this,'website')">Website design</button>
+      <button class="demo-tag" onclick="runDemo(this,'branding')">Branding</button>
+      <button class="demo-tag" onclick="runDemo(this,'photo')">Photography</button>
+      <button class="demo-tag" onclick="runDemo(this,'copy')">Copywriting</button>
+      <button class="demo-tag" onclick="runDemo(this,'video')">Video editing</button>
+    </div>
+    <div class="demo-proposal">
+      <div class="dp-badge"><div class="dp-badge-dot"></div>Live preview</div>
+      <div class="dp-client">Proposal for</div>
       <div class="dp-title" id="dp-title">Acme Marketing Co.</div>
       <div class="dp-divider"></div>
       <div class="scope-items" id="dp-scope">
@@ -731,139 +1111,201 @@ footer {
       <div class="dp-row"><span class="dp-row-l">Timeline</span><span class="dp-row-r">4 weeks</span></div>
       <div class="dp-row"><span class="dp-row-l">50% deposit</span><span class="dp-row-r" id="dp-deposit">$2,500</span></div>
       <div class="dp-total" id="dp-total">$5,000</div>
-      <div style="font-size:11px;color:var(--ink3);margin-bottom:4px">Total project investment</div>
-      <button class="dp-pay">Pay $2,500 deposit to get started →</button>
+      <div class="dp-invest">Total investment</div>
+      <button class="dp-pay" onclick="window.location='wizard.html'">
+        <span>Unlock & send this proposal</span>
+        <span>→</span>
+      </button>
+      <div class="dp-lock">
+        <svg viewBox="0 0 12 12" fill="none"><rect x="2" y="5" width="8" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 5V4a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.2"/></svg>
+        Generate free · Unlock to send with Pro — $19/month
+      </div>
     </div>
   </div>
-</div>
 
-<!-- TESTIMONIALS -->
-<section class="section">
-  <div class="section-tag reveal">Social proof</div>
-  <h2 class="section-h2 reveal">Freelancers <span>love it.</span></h2>
-  <div class="testi-grid reveal">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-quote">"I used to spend half my Sunday writing proposals. Now it takes me two minutes and clients actually comment on how professional they look."</div>
-      <div class="testi-author">
-        <div class="testi-av" style="background:#4f46e5">SR</div>
-        <div>
-          <div class="testi-name">Sarah R.</div>
-          <div class="testi-role">Freelance web designer · Vancouver</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     SECTION 5 — AI PERSONALITY
+══════════════════════════════════════════ -->
+<section class="ai-section">
+  <div class="ai-inner">
+
+    <div class="ai-left">
+      <div class="ai-eyebrow">The AI behind it</div>
+      <div class="ai-quote">
+        "Just answer 5 questions.<br><em>I'll write the rest."</em>
+      </div>
+      <p class="ai-sub">
+        Not a template filler. Not a chatbot. An AI that understands your project, knows what makes proposals win, and writes in a voice that sounds like you — at your most professional.
+      </p>
+      <button class="ai-try-btn" onclick="window.location='wizard.html'">
+        Try it free — no card needed
+        <svg viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="ai-chat">
+      <div class="chat-topbar">
+        <div class="chat-dots">
+          <div class="chat-dot" style="background:#ff5f57"></div>
+          <div class="chat-dot" style="background:#febc2e"></div>
+          <div class="chat-dot" style="background:#28c840"></div>
+        </div>
+        <div class="chat-label">SendItAlready · Proposal Generator</div>
+        <div class="chat-status">
+          <div class="chat-status-dot"></div>
+          Writing...
         </div>
       </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-quote">"Got a deposit paid within 20 minutes of sending my first proposal through here. That literally never happened with my old PDF + PayPal setup."</div>
-      <div class="testi-author">
-        <div class="testi-av" style="background:#16a34a">KL</div>
-        <div>
-          <div class="testi-name">Kyle L.</div>
-          <div class="testi-role">Brand photographer · Austin</div>
+      <div class="chat-body">
+        <div class="chat-msg user">
+          <div class="bubble">Website redesign for Acme Marketing, 4 weeks, $5k, 6-page site with WordPress CMS.</div>
+        </div>
+        <div class="chat-msg ai">
+          <div class="msg-name">SendItAlready</div>
+          <div class="bubble">
+            Got it — writing your proposal now. I'm positioning you as the expert from the first sentence.<br><br>
+            Here's what I'm including:
+            <span class="ai-tag">📋 Full scope breakdown</span>
+            <span class="ai-tag">💰 Deposit structure</span>
+            <span class="ai-tag">🗓️ Timeline milestones</span>
+            <span class="ai-tag">✍️ Why work with you</span>
+          </div>
+        </div>
+        <div class="chat-msg user">
+          <div class="bubble">Make it sound confident, not salesy.</div>
+        </div>
+        <div class="chat-msg ai">
+          <div class="msg-name">SendItAlready</div>
+          <div class="bubble">
+            Done — bold and direct, no fluff. Your proposal is ready to preview.<br>
+            <strong style="color:#22c55e">Unlock with Pro to send it →</strong>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <div class="testi-quote">"My close rate went up noticeably. I think it's because the proposals look so polished that clients just trust me more from the start."</div>
-      <div class="testi-author">
-        <div class="testi-av" style="background:#db2777">MJ</div>
-        <div>
-          <div class="testi-name">Maya J.</div>
-          <div class="testi-role">Brand copywriter · London</div>
-        </div>
+      <div class="chat-input-row">
+        <input class="chat-input" type="text" placeholder="Describe your project...">
+        <button class="chat-send-btn" onclick="window.location='wizard.html'">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M13 8L3 3L6 8L3 13L13 8Z" fill="white"/></svg>
+        </button>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="section" id="pricing" style="background:var(--bg2);border-top:1px solid var(--border)">
-  <div class="section-tag reveal">Pricing</div>
-  <h2 class="section-h2 reveal">Stupidly <span>simple.</span></h2>
-  <div class="pricing-grid reveal">
-    <div class="price-card">
-      <div class="price-name">Free forever</div>
-      <div class="price-amount">$0</div>
-      <div class="price-period">No card needed</div>
-      <div class="price-features">
-        <div class="pf"><span class="pf-check">✓</span> 3 proposals per month</div>
-        <div class="pf"><span class="pf-check">✓</span> PDF download</div>
-        <div class="pf"><span class="pf-check">✓</span> Payment link prompt</div>
-        <div class="pf"><span class="pf-x">✗</span> <span style="color:var(--ink3)">Custom branding</span></div>
-        <div class="pf"><span class="pf-x">✗</span> <span style="color:var(--ink3)">Unlimited proposals</span></div>
-      </div>
-      <button class="price-btn ghost" onclick="window.location='wizard.html'">Get started free</button>
-    </div>
-    <div class="price-card featured">
-      <div class="price-badge">Most popular</div>
-      <div class="price-name">Pro</div>
-      <div class="price-amount">$19</div>
-      <div class="price-period">per month · cancel anytime</div>
-      <div class="price-features">
-        <div class="pf"><span class="pf-check">✓</span> Unlimited proposals</div>
-        <div class="pf"><span class="pf-check">✓</span> Your logo + branding</div>
-        <div class="pf"><span class="pf-check">✓</span> Payment link built in</div>
-        <div class="pf"><span class="pf-check">✓</span> Client e-signature</div>
-        <div class="pf"><span class="pf-check">✓</span> Proposal tracking</div>
-      </div>
-      <button class="price-btn primary" onclick="window.location='wizard.html'">Start 7-day free trial →</button>
+
+<!-- ══════════════════════════════════════════
+     SECTION 6 — PRICING (HONEST)
+══════════════════════════════════════════ -->
+<section class="pricing-section" id="pricing">
+
+  <div class="pricing-left">
+    <div class="section-label">Pricing</div>
+    <h2 class="pricing-h2">Simple. <em>Honest.</em><br>Worth it.</h2>
+    <p class="pricing-honest">
+      <strong>Generate proposals for free — always.</strong> No account, no card, no limits on how many you write. The AI writes, you preview.
+    </p>
+    <p class="pricing-honest">
+      When you're ready to send, unlock Pro for $19/month. That's one extra billable hour that pays for itself — every single month.
+    </p>
+    <div class="pricing-model-note">
+      <span>🔓</span>
+      <span><strong>New model:</strong> Generate unlimited proposals free. Pay $19/month to unlock sending, PDF downloads, your branding, payment links, and proposal tracking.</span>
     </div>
   </div>
-  <p style="font-size:13px;color:var(--ink3);margin-top:20px">
-    50 paying customers = $950/month. That's a real side hustle.
-  </p>
+
+  <div>
+    <div class="pricing-card">
+      <div class="pc-free">
+        <div class="pc-free-label">Always free</div>
+        <div class="pc-free-items">
+          <div class="pc-free-item"><span class="pc-free-check">✓</span> Unlimited proposal generation</div>
+          <div class="pc-free-item"><span class="pc-free-check">✓</span> Full AI writing — no limits</div>
+          <div class="pc-free-item"><span class="pc-free-check">✓</span> Live preview before you commit</div>
+        </div>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-price-label">Pro — unlock &amp; send</div>
+      <div class="pc-price"><sup>$</sup>19</div>
+      <div class="pc-per">per month · cancel anytime</div>
+      <div class="pc-includes">
+        <div class="pc-item">
+          <div class="pc-check"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#FF3C3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          Send unlimited proposals as shareable links
+        </div>
+        <div class="pc-item">
+          <div class="pc-check"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#FF3C3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          PDF download with your logo &amp; branding
+        </div>
+        <div class="pc-item">
+          <div class="pc-check"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#FF3C3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          Payment link built in — Stripe, PayPal, e-transfer
+        </div>
+        <div class="pc-item">
+          <div class="pc-check"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#FF3C3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          Client e-signature &amp; proposal tracking
+        </div>
+        <div class="pc-item">
+          <div class="pc-check"><svg viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#FF3C3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          48-hour follow-up email generator
+        </div>
+      </div>
+      <a href="wizard.html" class="pc-cta">Start generating free →</a>
+      <div class="pc-fine">Try Pro free for 7 days · No card needed to generate</div>
+    </div>
+  </div>
+
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
+
+<!-- ══════════════════════════════════════════
+     FOOTER CTA
+══════════════════════════════════════════ -->
+<section class="footer-cta">
   <h2>
-    Just send it.<br>
-    <span>Already.</span>
+    JUST SEND IT.
+    <em>ALREADY.</em>
   </h2>
-  <p>Takes 2 minutes to set up. No credit card required.</p>
-  <div class="cta-btns">
-    <button class="btn-hero" onclick="window.location='wizard.html'">
-      Build my first proposal free
+  <p>Takes 2 minutes to generate. No card required to start.</p>
+  <div class="footer-cta-btns">
+    <button class="btn-primary" onclick="window.location='wizard.html'">
+      Generate my first proposal free
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
+    <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
   </div>
 </section>
+
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">SendItAlready</div>
+  <div>
+    <div class="footer-logo">Send<span>It</span>Already</div>
+    <div class="footer-tagline">Proposals that win. Built in 2 minutes.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="wizard.html">Try free</a>
+  </div>
   <div class="footer-copy">© 2026 · senditealready.co</div>
 </footer>
 
+
 <script>
-/* ── CURSOR ── */
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
-function animRing() { rx += (mx-rx)*0.12; ry += (my-ry)*0.12; ring.style.left = rx+'px'; ring.style.top = ry+'px'; requestAnimationFrame(animRing); }
-animRing();
-
-/* ── SCROLL REVEAL ── */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-/* ── TYPEWRITER ── */
+/* ── TYPEWRITER DEMO ── */
 const demos = {
   website: "Hi Sarah! I'm genuinely excited about the opportunity to redesign your website. With 6 years building conversion-focused sites for brands like yours, I know exactly what it takes to turn visitors into customers. Here's what I'm proposing...",
-  branding: "Hi Sarah! A brand refresh is one of the most exciting projects a business can invest in — and honestly, yours is overdue for something that really reflects where you're heading. I specialize in identity systems that feel timeless on day one and still sharp five years later...",
-  photo: "Hi Sarah! Great commercial photography doesn't just capture moments — it sells your brand before a single word is read. Having shot over 200 brand campaigns, I know how to make your products and team look their absolute best...",
-  copy: "Hi Sarah! Words that convert are rarer than most people think — and finding a writer who gets your brand voice even rarer. I've helped brands in your space increase email open rates by 40% and landing page conversions by 2x...",
-  video: "Hi Sarah! Video is the highest-converting content format in 2026, and clients who invest in it early always outpace the competition. I've edited over 300 brand videos and I know what makes people hit replay instead of scroll past..."
+  branding: "Hi Sarah! A brand refresh is one of the most exciting investments a business can make — and honestly, yours is overdue for something that really reflects where you're heading. I specialize in identity systems that feel timeless on day one and still sharp five years later...",
+  photo:    "Hi Sarah! Great commercial photography doesn't just capture moments — it sells your brand before a single word is read. Having shot over 200 brand campaigns, I know how to make your products and team look their absolute best...",
+  copy:     "Hi Sarah! Words that convert are rarer than most people think — and finding a writer who gets your brand voice even rarer. I've helped brands in your space increase email open rates by 40% and landing page conversions by 2x...",
+  video:    "Hi Sarah! Video is the highest-converting content format in 2026, and clients who invest in it early always outpace the competition. I've edited over 300 brand videos and I know what makes people hit replay instead of scroll past..."
 };
 
-let typeTimer = null;
-let currentText = '';
-let charIdx = 0;
+let typeTimer = null, charIdx = 0, currentText = '';
 
 function runDemo(btn, type) {
   document.querySelectorAll('.demo-tag').forEach(t => t.classList.remove('active'));
@@ -882,28 +1324,32 @@ function runDemo(btn, type) {
   }, 18);
 
   const scopes = {
-    website: ['6-page responsive website','WordPress CMS setup','2 rounds of revisions','Final handoff files'],
+    website:  ['6-page responsive website','WordPress CMS setup','2 rounds of revisions','Final handoff files'],
     branding: ['Logo + 2 variations','Brand guidelines PDF','Color & typography system','Social media kit'],
-    photo: ['Half-day shoot (4 hrs)','50 edited hero images','Commercial usage license','48hr turnaround'],
-    copy: ['Homepage rewrite','3 product page scripts','Email welcome sequence','SEO meta copy'],
-    video: ['Raw footage edit','Colour grading','Motion title cards','3 social cut-downs'],
+    photo:    ['Half-day shoot (4 hrs)','50 edited hero images','Commercial usage license','48hr turnaround'],
+    copy:     ['Homepage rewrite','3 product page scripts','Email welcome sequence','SEO meta copy'],
+    video:    ['Raw footage edit','Colour grading','Motion title cards','3 social cut-downs'],
   };
-  const sc = document.getElementById('dp-scope');
-  sc.innerHTML = scopes[type].map(s => `<div class="scope-i"><div class="scope-dot"></div>${s}</div>`).join('');
-  document.getElementById('dp-title').textContent = type.charAt(0).toUpperCase()+type.slice(1)+' proposal';
+  document.getElementById('dp-scope').innerHTML = scopes[type].map(s =>
+    `<div class="scope-i"><div class="scope-dot"></div>${s}</div>`
+  ).join('');
+  const t = type.charAt(0).toUpperCase() + type.slice(1);
+  document.getElementById('dp-title').textContent = t + ' proposal for Acme';
 }
 
-function updateDemoBudget(v) {
-  const fmt = '$' + parseInt(v).toLocaleString();
-  document.getElementById('demo-budget-val').textContent = fmt;
-  document.getElementById('dp-total').textContent = fmt;
-  const dep = '$' + Math.round(parseInt(v)/2).toLocaleString();
-  document.getElementById('dp-deposit').textContent = dep;
-}
+/* ── TICKER DUPLICATE FOR SEAMLESS LOOP ── */
+const ti = document.getElementById('ticker-inner');
+if (ti) ti.innerHTML += ti.innerHTML;
 
-/* start first typewriter on load */
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── START TYPEWRITER ON LOAD ── */
 window.addEventListener('load', () => {
-  setTimeout(() => runDemo(document.querySelector('.demo-tag.active'), 'website'), 800);
+  setTimeout(() => runDemo(document.querySelector('.demo-tag.active'), 'website'), 600);
 });
 </script>
 </body>
