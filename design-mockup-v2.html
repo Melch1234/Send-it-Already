@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SendItAlready — Mockup V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────────────────
+   RESET & TOKENS
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --white:   #FAFAF8;
+  --black:   #0A0A0A;
+  --ink:     #1A1A1A;
+  --muted:   #6B6B6B;
+  --border:  #E5E2DB;
+  --warm:    #F0EDE6;
+  --accent:  #FF3C3C;      /* hot red — completely different from yellow */
+  --accent2: #FF6B6B;
+  --green:   #00C48C;
+  --radius:  12px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(250,250,248,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--black);
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--accent); }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  font-size: 14px; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 14px; font-weight: 600;
+  padding: 11px 24px;
+  background: var(--black); color: var(--white);
+  border: none; border-radius: 99px; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s, transform 0.15s;
+}
+.nav-cta:hover { background: #333; transform: translateY(-1px); }
+
+/* ─────────────────────────────────────────
+   HERO — centered, editorial, serif
+───────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 140px 48px 80px;
+  position: relative;
+  background: var(--white);
+}
+
+/* subtle dot grid */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, #D0CCC4 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 6px 16px; border-radius: 99px;
+  margin-bottom: 32px; position: relative;
+  animation: fadeUp 0.5s ease both;
+}
+.eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  max-width: 900px;
+  margin-bottom: 24px;
+  position: relative;
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-h1 .underline-word {
+  position: relative; display: inline-block;
+}
+.hero-h1 .underline-word::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.hero-sub {
+  font-size: 18px; font-weight: 300; color: var(--muted);
+  max-width: 520px; line-height: 1.7;
+  margin-bottom: 40px; position: relative;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; position: relative;
+  animation: fadeUp 0.5s 0.3s ease both;
+}
+.btn-primary {
+  font-size: 15px; font-weight: 600;
+  padding: 16px 36px;
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: 99px; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(255,60,60,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,60,60,0.4); }
+.btn-ghost {
+  font-size: 14px; font-weight: 500; color: var(--muted);
+  background: none; border: 1px solid var(--border);
+  border-radius: 99px; padding: 16px 28px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+/* hero product preview */
+.hero-preview {
+  margin-top: 64px; position: relative;
+  animation: fadeUp 0.6s 0.4s ease both;
+  max-width: 880px; width: 100%;
+}
+.hero-preview-frame {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.12), 0 8px 32px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.frame-bar {
+  background: var(--warm); padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.frame-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.frame-url {
+  flex: 1; background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 12px;
+  font-size: 11px; color: var(--muted);
+  text-align: center;
+}
+.frame-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 340px;
+}
+.frame-left {
+  padding: 32px; border-right: 1px solid var(--border);
+}
+.frame-progress {
+  height: 3px; background: var(--border);
+  border-radius: 99px; margin-bottom: 8px; overflow: hidden;
+}
+.frame-progress-fill {
+  height: 100%; width: 20%;
+  background: var(--accent); border-radius: 99px;
+}
+.frame-step { font-size: 11px; color: var(--muted); margin-bottom: 24px; }
+.frame-question {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--black); margin-bottom: 6px;
+}
+.frame-hint { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.frame-input {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 14px; color: var(--ink); margin-bottom: 10px;
+  font-family: 'Inter', sans-serif; background: var(--white);
+}
+.frame-input:focus { outline: none; border-color: var(--accent); }
+.frame-tones {
+  display: flex; gap: 8px; margin-bottom: 24px;
+}
+.frame-tone {
+  padding: 6px 16px; border-radius: 99px;
+  font-size: 12px; border: 1px solid var(--border);
+  cursor: pointer; color: var(--muted); background: var(--white);
+}
+.frame-tone.active {
+  background: var(--ink); color: var(--white); border-color: var(--ink);
+}
+.frame-next {
+  width: 100%; padding: 13px;
+  background: var(--black); color: var(--white);
+  border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+}
+.frame-right {
+  padding: 32px; background: var(--warm);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.preview-label {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.preview-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  filter: blur(3px) grayscale(0.3);
+  position: relative; overflow: hidden;
+}
+.preview-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(250,250,248,0.95) 100%);
+}
+.preview-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; color: var(--black); margin-bottom: 12px;
+}
+.preview-line { height: 8px; background: var(--border); border-radius: 4px; margin-bottom: 8px; }
+.preview-line.short { width: 60%; }
+.preview-line.shorter { width: 40%; }
+.preview-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; color: var(--accent); margin-top: 12px;
+}
+.unlock-pill {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--black); color: var(--white);
+  padding: 10px 20px; border-radius: 99px;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+  z-index: 10; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  display: flex; align-items: center; gap: 6px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* social proof strip */
+.proof-strip {
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px; margin-top: 40px; position: relative;
+  animation: fadeUp 0.5s 0.5s ease both;
+}
+.proof-avatars { display: flex; }
+.proof-av {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--white); margin-left: -8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: var(--white);
+}
+.proof-text { font-size: 13px; color: var(--muted); }
+.proof-text strong { color: var(--ink); }
+.proof-divider { width: 1px; height: 20px; background: var(--border); }
+.proof-stars { color: #F4B942; letter-spacing: 2px; font-size: 12px; }
+
+/* ─────────────────────────────────────────
+   TICKER (restyled — black bar)
+───────────────────────────────────────── */
+.ticker {
+  background: var(--black); padding: 16px 0; overflow: hidden;
+}
+.ticker-inner {
+  display: flex; white-space: nowrap;
+  animation: ticker 30s linear infinite;
+}
+.ticker-inner span {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.4); padding: 0 32px;
+  letter-spacing: 0.05em;
+}
+.ticker-inner span em { color: var(--accent); font-style: normal; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ─────────────────────────────────────────
+   FREELANCER TYPES STRIP
+───────────────────────────────────────── */
+.types-strip {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0;
+  overflow: hidden;
+}
+.type-item {
+  font-size: 13px; color: var(--muted);
+  padding: 0 20px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+.type-item:last-child { border-right: none; }
+.type-item strong { color: var(--ink); }
+
+/* ─────────────────────────────────────────
+   HOW IT WORKS — vertical timeline
+───────────────────────────────────────── */
+.section { padding: 100px 48px; }
+.section-tag {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 12px;
+}
+.section-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -0.02em; color: var(--black);
+  margin-bottom: 16px;
+}
+.section-h2 em { font-style: italic; color: var(--accent); }
+.section-sub {
+  font-size: 16px; color: var(--muted);
+  max-width: 440px; line-height: 1.7; margin-bottom: 64px;
+}
+
+.timeline {
+  max-width: 800px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 28px; top: 0; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.timeline-item {
+  display: flex; gap: 32px;
+  margin-bottom: 52px; position: relative;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-num {
+  width: 56px; height: 56px; flex-shrink: 0;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+  color: var(--muted); z-index: 1;
+  transition: all 0.3s;
+}
+.timeline-item:hover .timeline-num {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--white);
+}
+.timeline-content { padding-top: 12px; }
+.timeline-title {
+  font-size: 20px; font-weight: 600; color: var(--black);
+  margin-bottom: 6px;
+}
+.timeline-desc { font-size: 15px; color: var(--muted); line-height: 1.7; }
+.timeline-badge {
+  display: inline-block; margin-top: 10px;
+  font-size: 11px; font-weight: 600; padding: 4px 12px;
+  border-radius: 99px; background: var(--warm);
+  color: var(--muted); border: 1px solid var(--border);
+}
+
+/* ─────────────────────────────────────────
+   THE PAYWALL REVEAL SECTION — NEW
+───────────────────────────────────────── */
+.paywall-section {
+  padding: 100px 48px;
+  background: var(--black);
+  position: relative; overflow: hidden;
+}
+.paywall-section::before {
+  content: '';
+  position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,60,60,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.paywall-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  max-width: 1100px; margin: 0 auto;
+}
+.paywall-left .section-tag { color: var(--accent); }
+.paywall-left .section-h2 { color: var(--white); }
+.paywall-left .section-h2 em { color: var(--accent); }
+.paywall-left p {
+  font-size: 16px; color: rgba(255,255,255,0.5);
+  line-height: 1.7; margin-bottom: 32px;
+}
+.paywall-steps { display: flex; flex-direction: column; gap: 16px; }
+.paywall-step {
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.paywall-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.paywall-icon.free { background: rgba(0,196,140,0.15); }
+.paywall-icon.paid { background: rgba(255,60,60,0.15); }
+.paywall-step-title { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.paywall-step-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+.free-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(0,196,140,0.2); color: var(--green);
+  border: 1px solid rgba(0,196,140,0.3); margin-left: 8px;
+  vertical-align: middle;
+}
+.paid-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(255,60,60,0.15); color: var(--accent);
+  border: 1px solid rgba(255,60,60,0.2); margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* proposal preview on dark bg */
+.paywall-right { position: relative; }
+.paywall-proposal {
+  background: #141414; border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; padding: 28px; overflow: hidden;
+  position: relative;
+}
+.pp-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.pp-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+.pp-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 700; color: var(--white);
+  margin-top: 4px;
+}
+.pp-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 16px 0; }
+.pp-scope { margin-bottom: 16px; }
+.pp-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 8px;
+}
+.pp-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.pp-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.pp-row-l { color: rgba(255,255,255,0.3); }
+.pp-row-r { color: rgba(255,255,255,0.7); font-weight: 500; }
+.pp-total {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; color: var(--accent); margin: 8px 0 4px;
+  letter-spacing: 0.02em;
+}
+
+/* blur paywall overlay */
+.pp-blur-section { position: relative; }
+.pp-blurred {
+  filter: blur(6px); user-select: none; pointer-events: none;
+}
+.pp-paywall-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+}
+.pp-lock {
+  width: 48px; height: 48px; background: var(--accent);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 0 32px rgba(255,60,60,0.4);
+}
+.pp-unlock-text {
+  font-size: 14px; font-weight: 600; color: var(--white);
+  text-align: center;
+}
+.pp-unlock-sub { font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+.pp-unlock-btn {
+  padding: 10px 24px;
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: 99px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ─────────────────────────────────────────
+   PRICING — single focus card
+───────────────────────────────────────── */
+.pricing-section {
+  padding: 100px 48px;
+  background: var(--warm);
+}
+.pricing-center { max-width: 520px; margin: 0 auto; }
+.price-card-new {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 24px; padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+  position: relative; overflow: hidden;
+}
+.price-card-new::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--accent);
+}
+.price-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px;
+}
+.price-name-new {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 900; color: var(--black);
+}
+.price-badge-new {
+  font-size: 11px; font-weight: 600; padding: 5px 14px;
+  background: rgba(255,60,60,0.1); color: var(--accent);
+  border: 1px solid rgba(255,60,60,0.2); border-radius: 99px;
+}
+.price-amount-new {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px; line-height: 1; color: var(--black);
+  letter-spacing: -0.02em;
+}
+.price-amount-new sup { font-size: 32px; vertical-align: top; margin-top: 12px; display: inline-block; }
+.price-period-new { font-size: 14px; color: var(--muted); margin-bottom: 28px; margin-top: -4px; }
+.price-divider { height: 1px; background: var(--border); margin: 24px 0; }
+.price-features-new { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.pf-new {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; color: var(--ink);
+}
+.pf-check-new {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,196,140,0.1); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.price-btn-new {
+  width: 100%; padding: 16px;
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: 99px;
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 24px rgba(255,60,60,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.price-btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,60,60,0.4); }
+.price-note {
+  text-align: center; font-size: 13px; color: var(--muted);
+  margin-top: 16px;
+}
+.price-free-note {
+  background: var(--warm); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px; margin-top: 16px;
+  font-size: 13px; color: var(--muted); line-height: 1.6;
+}
+.price-free-note strong { color: var(--ink); }
+
+/* ─────────────────────────────────────────
+   TESTIMONIALS — horizontal scroll
+───────────────────────────────────────── */
+.testi-section { padding: 100px 0 100px 48px; overflow: hidden; }
+.testi-header { margin-bottom: 48px; padding-right: 48px; }
+.testi-scroll {
+  display: flex; gap: 20px;
+  overflow-x: auto; padding-right: 48px; padding-bottom: 16px;
+  scrollbar-width: none;
+}
+.testi-scroll::-webkit-scrollbar { display: none; }
+.testi-card-new {
+  flex-shrink: 0; width: 360px;
+  background: var(--warm); border: 1px solid var(--border);
+  border-radius: 20px; padding: 28px;
+  transition: transform 0.3s;
+}
+.testi-card-new:hover { transform: translateY(-4px); }
+.testi-quote-new {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-style: italic;
+  color: var(--ink); line-height: 1.65;
+  margin-bottom: 24px;
+}
+.testi-footer { display: flex; align-items: center; justify-content: space-between; }
+.testi-author-new { display: flex; align-items: center; gap: 10px; }
+.testi-av-new {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--white); flex-shrink: 0;
+}
+.testi-name-new { font-size: 14px; font-weight: 600; color: var(--black); }
+.testi-role-new { font-size: 12px; color: var(--muted); }
+.testi-stars-new { color: #F4B942; font-size: 13px; letter-spacing: 1px; }
+
+/* ─────────────────────────────────────────
+   CTA — full-width editorial
+───────────────────────────────────────── */
+.cta-section {
+  padding: 120px 48px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(255,60,60,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 900; line-height: 1.0;
+  letter-spacing: -0.03em; color: var(--black);
+  margin-bottom: 20px; position: relative;
+}
+.cta-h2 em { color: var(--accent); font-style: italic; }
+.cta-sub { font-size: 16px; color: var(--muted); margin-bottom: 40px; }
+.cta-actions { display: flex; align-items: center; justify-content: center; gap: 12px; }
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  padding: 28px 48px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--white);
+}
+.footer-logo-new {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; color: var(--black);
+}
+.footer-logo-new span { color: var(--accent); }
+.footer-copy-new { font-size: 12px; color: var(--muted); }
+
+/* ─────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 900px) {
+  nav { padding: 16px 20px; }
+  .hero { padding: 120px 24px 60px; }
+  .section, .pricing-section { padding: 60px 24px; }
+  .paywall-inner { grid-template-columns: 1fr; gap: 40px; }
+  .frame-body { grid-template-columns: 1fr; }
+  .frame-right { display: none; }
+  .types-strip { flex-wrap: wrap; padding: 16px 24px; gap: 8px; }
+  .type-item { border-right: none; padding: 4px 12px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">SendIt<span>Already</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="wizard.html">Try free</a>
+  </div>
+  <button class="nav-cta">Generate a proposal →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <div class="eyebrow-dot"></div>
+    Freelancers are sending proposals right now
+  </div>
+  <h1 class="hero-h1">
+    Your next proposal,<br>
+    written in <em>60 seconds.</em>
+  </h1>
+  <p class="hero-sub">
+    Answer 5 questions. Get a beautiful, professional proposal with a payment link built in. Generate it free — unlock it for $19/month.
+  </p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="window.location='wizard.html'">
+      Generate my proposal free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="btn-ghost">See how it works ↓</button>
+  </div>
+
+  <!-- product preview frame -->
+  <div class="hero-preview reveal">
+    <div class="hero-preview-frame">
+      <div class="frame-bar">
+        <div class="frame-dot" style="background:#FF5F57"></div>
+        <div class="frame-dot" style="background:#FFBD2E;margin-left:4px"></div>
+        <div class="frame-dot" style="background:#28C840;margin-left:4px"></div>
+        <div class="frame-url">senditealready.co/wizard</div>
+      </div>
+      <div class="frame-body">
+        <div class="frame-left">
+          <div class="frame-progress"><div class="frame-progress-fill"></div></div>
+          <div class="frame-step">Step 1 of 5</div>
+          <div class="frame-question">Who's this proposal for?</div>
+          <div class="frame-hint">Your name appears on the proposal — client name is who you're pitching to.</div>
+          <input class="frame-input" type="text" value="Alex Johnson" readonly>
+          <input class="frame-input" type="text" value="Acme Marketing Co." readonly>
+          <div class="frame-tones">
+            <div class="frame-tone active">Professional</div>
+            <div class="frame-tone">Friendly</div>
+            <div class="frame-tone">Bold</div>
+          </div>
+          <button class="frame-next">Next — project type →</button>
+        </div>
+        <div class="frame-right">
+          <div class="preview-label">✦ Live proposal preview</div>
+          <div class="preview-card">
+            <div class="preview-card-title">Website Redesign Proposal</div>
+            <div class="preview-line"></div>
+            <div class="preview-line short"></div>
+            <div class="preview-line"></div>
+            <div class="preview-line shorter"></div>
+            <div class="preview-price">$5,000</div>
+          </div>
+          <div class="unlock-pill" style="top: 55%">
+            🔒 Unlock to send — $19/mo
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proof-strip">
+    <div class="proof-avatars">
+      <div class="proof-av" style="background:#4f46e5">SR</div>
+      <div class="proof-av" style="background:#16a34a">KL</div>
+      <div class="proof-av" style="background:#e8c547; color:#0c0b09">AP</div>
+      <div class="proof-av" style="background:#db2777">MJ</div>
+    </div>
+    <div class="proof-text"><strong>Freelancers</strong> winning more clients</div>
+    <div class="proof-divider"></div>
+    <div class="proof-stars">★★★★★</div>
+    <div class="proof-text" style="margin-left:-8px">Loved by designers, photographers & writers</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span>Win more clients <em>✦</em></span>
+    <span>Proposals in 60 seconds <em>✦</em></span>
+    <span>Get paid faster <em>✦</em></span>
+    <span>Look like a pro <em>✦</em></span>
+    <span>No more Word docs <em>✦</em></span>
+    <span>Close the deal <em>✦</em></span>
+    <span>Built for freelancers <em>✦</em></span>
+    <span>Win more clients <em>✦</em></span>
+    <span>Proposals in 60 seconds <em>✦</em></span>
+    <span>Get paid faster <em>✦</em></span>
+    <span>Look like a pro <em>✦</em></span>
+    <span>No more Word docs <em>✦</em></span>
+    <span>Close the deal <em>✦</em></span>
+    <span>Built for freelancers <em>✦</em></span>
+  </div>
+</div>
+
+<!-- FREELANCER TYPES -->
+<div class="types-strip">
+  <div class="type-item">Web <strong>Designers</strong></div>
+  <div class="type-item">Brand <strong>Photographers</strong></div>
+  <div class="type-item">UX <strong>Consultants</strong></div>
+  <div class="type-item">Video <strong>Editors</strong></div>
+  <div class="type-item">Brand <strong>Copywriters</strong></div>
+  <div class="type-item">Marketing <strong>Freelancers</strong></div>
+  <div class="type-item">Creative <strong>Directors</strong></div>
+</div>
+
+<!-- HOW IT WORKS — vertical timeline -->
+<section class="section" id="how">
+  <div class="section-tag reveal">The process</div>
+  <h2 class="section-h2 reveal">Four steps.<br><em>Zero stress.</em></h2>
+  <p class="section-sub reveal">From blank page to professional proposal with a payment link — in under 2 minutes.</p>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-num">01</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Answer 5 quick questions</div>
+        <div class="timeline-desc">Client name, project type, budget, timeline, deliverables. That's it — no account needed, no setup, no friction.</div>
+        <div class="timeline-badge">90 seconds</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-num">02</div>
+      <div class="timeline-content">
+        <div class="timeline-title">AI writes your proposal instantly</div>
+        <div class="timeline-desc">Professional scope, pricing breakdown, process steps — written by AI, sounding like you at your absolute best. Polished enough to impress any client.</div>
+        <div class="timeline-badge">Instant</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-num">03</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Unlock it to send — $19/month</div>
+        <div class="timeline-desc">Generate as many as you like for free. When you're ready to send one to a client, unlock with a Pro plan. Your branding, payment link built in, client e-signature — all included.</div>
+        <div class="timeline-badge">$19/month · cancel anytime</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-num">04</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Client reads, signs, pays — done</div>
+        <div class="timeline-desc">One link. They open it on any device, read the proposal, accept, and pay the deposit. You get notified the moment money lands. No PDFs, no chasing.</div>
+        <div class="timeline-badge">You win</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYWALL REVEAL SECTION -->
+<div class="paywall-section">
+  <div class="paywall-inner">
+    <div class="paywall-left reveal">
+      <div class="section-tag">How it works</div>
+      <h2 class="section-h2">Generate free.<br><em>Pay to send.</em></h2>
+      <p>We want you to see exactly how good your proposal looks before you commit to anything. Generate it, preview it, fall in love with it — then unlock it when you're ready to win the client.</p>
+      <div class="paywall-steps">
+        <div class="paywall-step">
+          <div class="paywall-icon free">✍️</div>
+          <div>
+            <div class="paywall-step-title">Generate your proposal <span class="free-tag">FREE</span></div>
+            <div class="paywall-step-desc">Answer 5 questions. AI writes a full proposal in seconds. No account required.</div>
+          </div>
+        </div>
+        <div class="paywall-step">
+          <div class="paywall-icon free">👀</div>
+          <div>
+            <div class="paywall-step-title">Preview it live <span class="free-tag">FREE</span></div>
+            <div class="paywall-step-desc">See exactly how your client will see it. Beautiful, professional, branded.</div>
+          </div>
+        </div>
+        <div class="paywall-step">
+          <div class="paywall-icon paid">🔓</div>
+          <div>
+            <div class="paywall-step-title">Unlock to send <span class="paid-tag">$19/MO</span></div>
+            <div class="paywall-step-desc">Send the link to your client, collect e-signature, get paid. Unlimited proposals.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="paywall-right reveal">
+      <div class="paywall-proposal">
+        <div class="pp-header">
+          <div>
+            <div class="pp-label">Proposal for</div>
+            <div class="pp-title">Acme Marketing Co.</div>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;text-transform:uppercase;">Website Redesign</div>
+        </div>
+        <div class="pp-divider"></div>
+        <div class="pp-scope">
+          <div class="pp-item"><div class="pp-dot"></div>6-page responsive website</div>
+          <div class="pp-item"><div class="pp-dot"></div>WordPress CMS setup</div>
+          <div class="pp-item"><div class="pp-dot"></div>2 rounds of revisions</div>
+        </div>
+        <div class="pp-divider"></div>
+        <div class="pp-row"><span class="pp-row-l">Timeline</span><span class="pp-row-r">4 weeks</span></div>
+        <div class="pp-row"><span class="pp-row-l">50% deposit</span><span class="pp-row-r">$2,500</span></div>
+        <div class="pp-total">$5,000</div>
+
+        <!-- blurred paywall area -->
+        <div class="pp-blur-section">
+          <div class="pp-blurred">
+            <div class="pp-divider"></div>
+            <div style="height:40px;background:rgba(255,255,255,0.05);border-radius:8px;margin-bottom:10px"></div>
+            <div style="height:48px;background:rgba(255,60,60,0.3);border-radius:10px"></div>
+          </div>
+          <div class="pp-paywall-overlay">
+            <div class="pp-lock">🔒</div>
+            <div class="pp-unlock-text">Unlock to send this proposal</div>
+            <div class="pp-unlock-sub">Add your branding, payment link & e-signature</div>
+            <button class="pp-unlock-btn">Unlock for $19/month →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="testi-header">
+    <div class="section-tag reveal">Social proof</div>
+    <h2 class="section-h2 reveal">Freelancers <em>love it.</em></h2>
+  </div>
+  <div class="testi-scroll">
+    <div class="testi-card-new">
+      <div class="testi-quote-new">"I used to spend half my Sunday writing proposals. Now it takes two minutes and clients actually comment on how professional they look."</div>
+      <div class="testi-footer">
+        <div class="testi-author-new">
+          <div class="testi-av-new" style="background:#4f46e5">SR</div>
+          <div>
+            <div class="testi-name-new">Sarah R.</div>
+            <div class="testi-role-new">Freelance web designer · Vancouver</div>
+          </div>
+        </div>
+        <div class="testi-stars-new">★★★★★</div>
+      </div>
+    </div>
+    <div class="testi-card-new">
+      <div class="testi-quote-new">"Got a deposit paid within 20 minutes of sending my first proposal through here. That literally never happened with my old PDF + PayPal setup."</div>
+      <div class="testi-footer">
+        <div class="testi-author-new">
+          <div class="testi-av-new" style="background:#16a34a">KL</div>
+          <div>
+            <div class="testi-name-new">Kyle L.</div>
+            <div class="testi-role-new">Brand photographer · Austin</div>
+          </div>
+        </div>
+        <div class="testi-stars-new">★★★★★</div>
+      </div>
+    </div>
+    <div class="testi-card-new">
+      <div class="testi-quote-new">"My close rate went up noticeably. I think it's because the proposals look so polished that clients trust me from the very first read."</div>
+      <div class="testi-footer">
+        <div class="testi-author-new">
+          <div class="testi-av-new" style="background:#db2777">MJ</div>
+          <div>
+            <div class="testi-name-new">Maya J.</div>
+            <div class="testi-role-new">Brand copywriter · London</div>
+          </div>
+        </div>
+        <div class="testi-stars-new">★★★★★</div>
+      </div>
+    </div>
+    <div class="testi-card-new">
+      <div class="testi-quote-new">"I was sceptical but the AI nails the tone. My clients think I wrote every word. The payment link being built in is genuinely a game changer."</div>
+      <div class="testi-footer">
+        <div class="testi-author-new">
+          <div class="testi-av-new" style="background:#b45309">TW</div>
+          <div>
+            <div class="testi-name-new">Tom W.</div>
+            <div class="testi-role-new">UX consultant · Toronto</div>
+          </div>
+        </div>
+        <div class="testi-stars-new">★★★★★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div style="text-align:center;margin-bottom:48px">
+    <div class="section-tag reveal" style="justify-content:center;display:flex">Pricing</div>
+    <h2 class="section-h2 reveal" style="text-align:center">One plan.<br><em>Stupidly simple.</em></h2>
+  </div>
+  <div class="pricing-center">
+    <div class="price-card-new reveal">
+      <div class="price-top">
+        <div class="price-name-new">Pro</div>
+        <div class="price-badge-new">Most popular</div>
+      </div>
+      <div class="price-amount-new"><sup>$</sup>19</div>
+      <div class="price-period-new">per month · cancel anytime</div>
+      <div class="price-divider"></div>
+      <div class="price-features-new">
+        <div class="pf-new"><div class="pf-check-new">✓</div> Unlimited proposals</div>
+        <div class="pf-new"><div class="pf-check-new">✓</div> Your logo + custom branding</div>
+        <div class="pf-new"><div class="pf-check-new">✓</div> Stripe payment link built in</div>
+        <div class="pf-new"><div class="pf-check-new">✓</div> Client e-signature</div>
+        <div class="pf-new"><div class="pf-check-new">✓</div> Proposal open tracking</div>
+        <div class="pf-new"><div class="pf-check-new">✓</div> PDF download</div>
+      </div>
+      <button class="price-btn-new">Start 7-day free trial →</button>
+      <div class="price-note">No credit card for the trial. Cancel anytime.</div>
+    </div>
+    <div class="price-free-note reveal">
+      <strong>Just want to try it?</strong> Generate and preview proposals completely free — no account needed. Upgrade to Pro when you're ready to send one to a client.
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-h2 reveal">
+    Just send it.<br>
+    <em>Already.</em>
+  </h2>
+  <p class="cta-sub reveal">Takes 2 minutes. Generate free. No card required.</p>
+  <div class="cta-actions reveal">
+    <button class="btn-primary" onclick="window.location='wizard.html'">
+      Generate my proposal free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="btn-ghost" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">See pricing</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo-new">SendIt<span>Already</span></div>
+  <div class="footer-copy-new">© 2026 · senditealready.co</div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

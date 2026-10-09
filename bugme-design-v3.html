@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Don't BUGMe I'm On Vacation — V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0A0A0A;
+      --yellow: #F5E642;
+      --white: #FFFFFF;
+      --cream: #F4EFE4;
+      --grey: #1A1A1A;
+      --mid-grey: #2C2C2C;
+      --text-grey: #888;
+      --red: #E84C1E;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--yellow);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s;
+      mix-blend-mode: difference;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      mix-blend-mode: difference;
+    }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--yellow); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-cta {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--yellow);
+      border: none;
+      padding: 10px 24px;
+      cursor: none;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 64px 72px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--yellow);
+    }
+
+    .hero-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(80px, 11vw, 148px);
+      line-height: 0.88;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+    }
+
+    .hero-headline .line-accent {
+      color: var(--yellow);
+      font-style: italic;
+    }
+
+    .hero-headline .line-outline {
+      -webkit-text-stroke: 2px var(--white);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+      max-width: 440px;
+      margin-bottom: 40px;
+    }
+
+    .hero-search {
+      display: flex;
+      gap: 0;
+      max-width: 520px;
+      margin-bottom: 32px;
+    }
+
+    .hero-search input {
+      flex: 1;
+      background: var(--grey);
+      border: 1px solid #333;
+      border-right: none;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 16px 20px;
+      outline: none;
+    }
+
+    .hero-search input::placeholder { color: #555; }
+
+    .hero-search button {
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 28px;
+      cursor: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .hero-search button:hover { background: #fff; }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--white);
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-grey);
+    }
+
+    /* Hero right panel — map visualization */
+    .hero-right {
+      background: var(--grey);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-map-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0f1f0f 0%, #1a3a1a 40%, #0d2a1a 70%, #051505 100%);
+    }
+
+    .hero-map-svg {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      opacity: 0.9;
+    }
+
+    .route-line {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: drawRoute 3s ease forwards 0.5s;
+    }
+
+    @keyframes drawRoute {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .pulse-dot {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; r: 6; }
+      50% { opacity: 0.5; r: 10; }
+    }
+
+    .hero-pass-card {
+      position: absolute;
+      bottom: 40px;
+      left: -20px;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 20px 24px;
+      z-index: 3;
+      width: 200px;
+    }
+
+    .hero-pass-card-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 52px;
+      line-height: 1;
+    }
+
+    .hero-pass-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--yellow);
+      color: var(--black);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      gap: 0;
+      animation: tickerScroll 30s linear infinite;
+    }
+
+    .ticker-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .ticker-item::after {
+      content: '→';
+      opacity: 0.4;
+    }
+
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION STYLES ── */
+    section {
+      position: relative;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--yellow);
+    }
+
+    /* ── ADVENTURER TYPES ── */
+    .types-section {
+      background: var(--cream);
+      color: var(--black);
+      padding: 120px 64px;
+    }
+
+    .types-section .section-label {
+      color: var(--red);
+    }
+
+    .types-section .section-label::before { background: var(--red); }
+
+    .types-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 64px;
+      max-width: 700px;
+    }
+
+    .types-headline em {
+      font-style: italic;
+      color: var(--red);
+    }
+
+    .types-strip {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 8px;
+    }
+
+    .type-card {
+      flex: 0 0 260px;
+      border: 1px solid rgba(0,0,0,0.12);
+      padding: 36px 28px;
+      position: relative;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .type-card:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .type-card:hover .type-num { color: var(--yellow); }
+    .type-card:hover .type-tags { color: rgba(255,255,255,0.5); }
+
+    .type-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 72px;
+      line-height: 1;
+      color: rgba(0,0,0,0.08);
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      transition: color 0.3s;
+    }
+
+    .type-icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .type-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+
+    .type-tags {
+      font-size: 12px;
+      color: rgba(0,0,0,0.45);
+      line-height: 1.7;
+      transition: color 0.3s;
+    }
+
+    /* ── COMMUNITY ── */
+    .community-section {
+      background: var(--black);
+      padding: 120px 64px;
+    }
+
+    .community-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+
+    .community-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(56px, 6vw, 88px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .community-headline .accent { color: var(--yellow); }
+
+    .community-cta-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-grey);
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+
+    .community-cta-link:hover { color: var(--white); }
+
+    .community-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .community-card {
+      background: var(--grey);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .community-photo {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .community-photo-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .photo-banff {
+      background: linear-gradient(160deg, #1a3a2a 0%, #2d6040 50%, #1a4030 100%);
+    }
+
+    .photo-jasper {
+      background: linear-gradient(200deg, #0d1a2a 0%, #1a3a5a 50%, #0d2040 100%);
+    }
+
+    .photo-kelowna {
+      background: linear-gradient(140deg, #3a1a10 0%, #6a3020 50%, #4a2015 100%);
+    }
+
+    .photo-label {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      z-index: 2;
+    }
+
+    .photo-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      opacity: 0.15;
+    }
+
+    .community-card-body {
+      padding: 20px 24px 24px;
+    }
+
+    .trip-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .trip-location {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--yellow);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .trip-quote {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    /* ── ROUTE BUILDER ── */
+    .route-section {
+      background: var(--grey);
+      padding: 120px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .route-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(52px, 5.5vw, 80px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .route-headline .accent { color: var(--yellow); }
+
+    .route-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .route-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--yellow);
+      padding: 14px 28px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .route-cta:hover { background: var(--white); }
+
+    .route-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .route-stop {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .route-stop-num {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--yellow);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .route-stop-connector {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 64px;
+      background: repeating-linear-gradient(to bottom, #444 0, #444 4px, transparent 4px, transparent 10px);
+    }
+
+    .route-stop:last-child .route-stop-connector { display: none; }
+
+    .route-stop-content {
+      padding-bottom: 64px;
+    }
+
+    .route-stop:last-child .route-stop-content { padding-bottom: 0; }
+
+    .route-city {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .route-business {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--mid-grey);
+      padding: 6px 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .route-business-badge {
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── ROADIE AI ── */
+    .roadie-section {
+      background: var(--black);
+      padding: 120px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .roadie-chat {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #1a1a1a;
+      border-bottom: 1px solid #222;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-dots { display: flex; gap: 6px; }
+    .chat-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .chat-dot.r { background: #ff5f57; }
+    .chat-dot.y { background: #ffbd2e; }
+    .chat-dot.g { background: #28c841; }
+
+    .chat-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-grey);
+      letter-spacing: 0.05em;
+    }
+
+    .chat-online {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #28c841;
+    }
+
+    .chat-online::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: #28c841;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .chat-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+    .chat-msg {
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 85%;
+    }
+
+    .chat-msg.user {
+      background: #222;
+      color: rgba(255,255,255,0.8);
+      align-self: flex-end;
+      border-radius: 2px 2px 0 2px;
+    }
+
+    .chat-msg.ai {
+      background: var(--grey);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 2px 2px 2px;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .chat-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chat-tag {
+      background: #333;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .roadie-text .section-label { color: var(--yellow); }
+
+    .roadie-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(52px, 5.5vw, 80px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .roadie-headline .accent { color: var(--yellow); }
+    .roadie-headline .outline {
+      -webkit-text-stroke: 2px white;
+      color: transparent;
+    }
+
+    .roadie-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      background: var(--yellow);
+      color: var(--black);
+      padding: 120px 64px;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .pricing-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(72px, 10vw, 140px);
+      line-height: 0.85;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+
+    .pricing-headline span {
+      display: block;
+      -webkit-text-stroke: 3px var(--black);
+      color: transparent;
+    }
+
+    .pricing-card {
+      background: var(--black);
+      color: var(--white);
+      padding: 48px 40px;
+    }
+
+    .pricing-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 28px;
+    }
+
+    .pricing-price {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 88px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .pricing-price-sub {
+      font-size: 13px;
+      color: var(--text-grey);
+      margin-bottom: 36px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.4;
+    }
+
+    .pricing-features li::before {
+      content: '→';
+      color: var(--yellow);
+      flex-shrink: 0;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .pricing-btn {
+      display: block;
+      width: 100%;
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 18px;
+      cursor: none;
+      text-align: center;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .pricing-btn:hover { background: var(--white); }
+
+    .pricing-fine {
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--text-grey);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .pricing-businesses {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .businesses-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-grey);
+      margin-bottom: 16px;
+    }
+
+    .businesses-count {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 48px;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .businesses-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505;
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .footer-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .footer-logo span { color: var(--yellow); }
+
+    .footer-tagline {
+      font-size: 13px;
+      color: var(--text-grey);
+      line-height: 1.6;
+    }
+
+    .footer-nav-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-grey);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      background: #050505;
+      border-top: 1px solid #111;
+      padding: 20px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #333;
+    }
+
+    .footer-made {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      color: #333;
+    }
+
+    /* ── BIG CTA BAND ── */
+    .cta-band {
+      background: var(--red);
+      padding: 80px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cta-band-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(48px, 5vw, 72px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-band-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--white);
+      padding: 20px 40px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .cta-band-btn:hover { background: var(--black); color: var(--white); }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Don't <span>BUG</span>Me</a>
+    <ul class="nav-links">
+      <li><a href="#">Adventure Map</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">For Businesses</a></li>
+    </ul>
+    <a href="#pricing" class="nav-cta">Buy the Pass — $99</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-label">Road Trip Pass · Canada &amp; Beyond</p>
+      <h1 class="hero-headline">
+        The pass<br>
+        <span class="line-accent">that pays</span><br>
+        <span class="line-outline">for itself.</span>
+      </h1>
+      <p class="hero-sub">One $99 pass. 20% off at every partner business. The map is free forever — the pass pays for itself on a single trip.</p>
+      <div class="hero-search">
+        <input type="text" placeholder="Where are you starting from?">
+        <button>Build My Route →</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">1,500+</span>
+          <span class="hero-stat-label">Adventures on the map</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">25</span>
+          <span class="hero-stat-label">Pass businesses</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">Free</span>
+          <span class="hero-stat-label">Always, to explore</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-map-bg"></div>
+      <!-- Stylized SVG map of Western Canada route -->
+      <svg class="hero-map-svg" viewBox="0 0 340 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background grid lines -->
+        <line x1="0" y1="100" x2="340" y2="100" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="0" y1="200" x2="340" y2="200" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="0" y1="300" x2="340" y2="300" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="0" y1="400" x2="340" y2="400" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="85" y1="0" x2="85" y2="520" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="170" y1="0" x2="170" y2="520" stroke="#ffffff08" stroke-width="1"/>
+        <line x1="255" y1="0" x2="255" y2="520" stroke="#ffffff08" stroke-width="1"/>
+        <!-- Mountain silhouettes -->
+        <path d="M0 350 L40 240 L80 310 L130 180 L170 250 L210 160 L260 230 L300 190 L340 240 L340 520 L0 520Z" fill="#1a3a1a" opacity="0.6"/>
+        <path d="M0 400 L60 300 L100 360 L150 260 L200 320 L240 260 L280 310 L340 280 L340 520 L0 520Z" fill="#0d2a14" opacity="0.5"/>
+        <!-- Route line -->
+        <path class="route-line" d="M170 60 C170 60 150 100 140 140 C130 180 145 200 140 240 C135 280 115 300 120 340 C125 380 160 400 160 440 C160 470 155 490 155 490" stroke="#F5E642" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Route dots with labels -->
+        <g>
+          <circle cx="170" cy="60" r="6" fill="#F5E642" class="pulse-dot"/>
+          <circle cx="170" cy="60" r="12" fill="#F5E642" opacity="0.15"/>
+          <text x="182" y="64" fill="white" font-family="Space Mono" font-size="9" letter-spacing="0.1em">JASPER</text>
+        </g>
+        <g>
+          <circle cx="140" cy="160" r="5" fill="#F5E642"/>
+          <circle cx="140" cy="160" r="10" fill="#F5E642" opacity="0.2"/>
+          <text x="152" y="164" fill="white" font-family="Space Mono" font-size="9" letter-spacing="0.1em">BANFF</text>
+        </g>
+        <g>
+          <circle cx="120" cy="280" r="5" fill="#F5E642"/>
+          <text x="132" y="284" fill="white" font-family="Space Mono" font-size="9" letter-spacing="0.1em">GOLDEN</text>
+        </g>
+        <g>
+          <circle cx="155" cy="390" r="5" fill="#F5E642"/>
+          <text x="167" y="394" fill="white" font-family="Space Mono" font-size="9" letter-spacing="0.1em">KELOWNA</text>
+        </g>
+        <g>
+          <circle cx="155" cy="480" r="6" fill="#E84C1E" class="pulse-dot"/>
+          <circle cx="155" cy="480" r="12" fill="#E84C1E" opacity="0.2"/>
+          <text x="167" y="484" fill="white" font-family="Space Mono" font-size="9" letter-spacing="0.1em">VANCOUVER</text>
+        </g>
+        <!-- Compass -->
+        <g transform="translate(290, 60)">
+          <circle cx="0" cy="0" r="22" stroke="#ffffff15" stroke-width="1"/>
+          <text x="-4" y="-8" fill="#ffffff40" font-family="Space Mono" font-size="8">N</text>
+          <line x1="0" y1="-15" x2="0" y2="15" stroke="#ffffff20" stroke-width="1"/>
+          <line x1="-15" y1="0" x2="15" y2="0" stroke="#ffffff20" stroke-width="1"/>
+          <polygon points="0,-12 3,0 0,-4 -3,0" fill="#F5E642"/>
+          <polygon points="0,12 3,0 0,4 -3,0" fill="#ffffff40"/>
+        </g>
+        <!-- Distance badge -->
+        <rect x="12" y="440" width="100" height="32" fill="#F5E64220" rx="1"/>
+        <text x="22" y="458" fill="#F5E642" font-family="Space Mono" font-size="9" letter-spacing="0.05em">≈ 1,200 KM</text>
+      </svg>
+      <!-- Pass card floating -->
+      <div class="hero-pass-card">
+        <div class="hero-pass-card-num">20%</div>
+        <div class="hero-pass-card-label">Off at every<br>partner business</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">Banff</span>
+      <span class="ticker-item">Jasper</span>
+      <span class="ticker-item">Kelowna</span>
+      <span class="ticker-item">Golden</span>
+      <span class="ticker-item">Whistler</span>
+      <span class="ticker-item">Tofino</span>
+      <span class="ticker-item">Kamloops</span>
+      <span class="ticker-item">Revelstoke</span>
+      <span class="ticker-item">Canmore</span>
+      <span class="ticker-item">Nelson</span>
+      <span class="ticker-item">Fernie</span>
+      <span class="ticker-item">Banff</span>
+      <span class="ticker-item">Jasper</span>
+      <span class="ticker-item">Kelowna</span>
+      <span class="ticker-item">Golden</span>
+      <span class="ticker-item">Whistler</span>
+      <span class="ticker-item">Tofino</span>
+      <span class="ticker-item">Kamloops</span>
+      <span class="ticker-item">Revelstoke</span>
+      <span class="ticker-item">Canmore</span>
+      <span class="ticker-item">Nelson</span>
+      <span class="ticker-item">Fernie</span>
+    </div>
+  </div>
+
+  <!-- ADVENTURER TYPES -->
+  <section class="types-section">
+    <p class="section-label">Who's this for</p>
+    <h2 class="types-headline">What kind of<br><em>adventurer</em><br>are you?</h2>
+    <div class="types-strip">
+      <div class="type-card">
+        <span class="type-num">01</span>
+        <div class="type-icon">⚡</div>
+        <div class="type-name">Thrill Seeker</div>
+        <div class="type-tags">Rafting · Rock climbing<br>Zip lining · Skydiving</div>
+      </div>
+      <div class="type-card">
+        <span class="type-num">02</span>
+        <div class="type-icon">🌲</div>
+        <div class="type-name">Nature Lover</div>
+        <div class="type-tags">Hiking · Wildlife<br>Hot springs · Photography</div>
+      </div>
+      <div class="type-card">
+        <span class="type-num">03</span>
+        <div class="type-icon">🍷</div>
+        <div class="type-name">Foodie Explorer</div>
+        <div class="type-tags">Breweries · Farm-to-table<br>Local markets · Wineries</div>
+      </div>
+      <div class="type-card">
+        <span class="type-num">04</span>
+        <div class="type-icon">🚗</div>
+        <div class="type-name">Family Road Trip</div>
+        <div class="type-tags">Kid-friendly · Campgrounds<br>Scenic drives · Fun stops</div>
+      </div>
+      <div class="type-card">
+        <span class="type-num">05</span>
+        <div class="type-icon">🦅</div>
+        <div class="type-name">Wildlife Watcher</div>
+        <div class="type-tags">Safari drives · Bird tours<br>Bear watching · Whale spotting</div>
+      </div>
+      <div class="type-card">
+        <span class="type-num">06</span>
+        <div class="type-icon">🧭</div>
+        <div class="type-name">Off the Beaten Path</div>
+        <div class="type-tags">Hidden gems · Backcountry<br>Secret spots · Local secrets</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="community-section">
+    <div class="community-header">
+      <h2 class="community-headline">Real trips.<br><span class="accent">Real adventurers.</span></h2>
+      <a href="#" class="community-cta-link">See all trips →</a>
+    </div>
+    <div class="community-grid">
+      <div class="community-card">
+        <div class="community-photo">
+          <div class="community-photo-bg photo-banff"></div>
+          <div class="photo-icon">⛰️</div>
+          <div class="photo-label">📍 Banff, AB</div>
+        </div>
+        <div class="community-card-body">
+          <div class="trip-name">That Banff Sunrise Though</div>
+          <div class="trip-location">📍 Banff, Alberta</div>
+          <div class="trip-quote">"We saved over $400 on one weekend. The pass paid for itself on day one."</div>
+        </div>
+      </div>
+      <div class="community-card">
+        <div class="community-photo">
+          <div class="community-photo-bg photo-jasper"></div>
+          <div class="photo-icon">🌊</div>
+          <div class="photo-label">📍 Golden, BC</div>
+        </div>
+        <div class="community-card-body">
+          <div class="trip-name">Best Rafting of Our Lives</div>
+          <div class="trip-location">📍 Golden, British Columbia</div>
+          <div class="trip-quote">"Roadie found us an overnight stop in Kamloops we never would have found on our own."</div>
+        </div>
+      </div>
+      <div class="community-card">
+        <div class="community-photo">
+          <div class="community-photo-bg photo-kelowna"></div>
+          <div class="photo-icon">🦌</div>
+          <div class="photo-label">📍 Jasper, AB</div>
+        </div>
+        <div class="community-card-body">
+          <div class="trip-name">Jasper: Absolutely Surreal</div>
+          <div class="trip-location">📍 Jasper, Alberta</div>
+          <div class="trip-quote">"Three families, one pass each. Two weeks of adventures. Zero regrets."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROUTE BUILDER -->
+  <section class="route-section">
+    <div>
+      <p class="section-label">The Map</p>
+      <h2 class="route-headline">Plan your route.<br><span class="accent">Discover</span><br>along the way.</h2>
+      <p class="route-desc">Drop pins, find pass businesses nearby, and let Roadie suggest the stops you didn't know you needed. The map is free — forever.</p>
+      <a href="#" class="route-cta">Open the map →</a>
+    </div>
+    <div class="route-timeline">
+      <div class="route-stop">
+        <div class="route-stop-num">
+          1
+          <div class="route-stop-connector"></div>
+        </div>
+        <div class="route-stop-content">
+          <div class="route-city">Banff, Alberta</div>
+          <div class="route-business">
+            Banff Alpine Guides
+            <span class="route-business-badge">20% off</span>
+          </div>
+        </div>
+      </div>
+      <div class="route-stop">
+        <div class="route-stop-num">
+          2
+          <div class="route-stop-connector"></div>
+        </div>
+        <div class="route-stop-content">
+          <div class="route-city">Golden, BC</div>
+          <div class="route-business">
+            Thompson River Rafting
+            <span class="route-business-badge">20% off</span>
+          </div>
+        </div>
+      </div>
+      <div class="route-stop">
+        <div class="route-stop-num">
+          3
+          <div class="route-stop-connector"></div>
+        </div>
+        <div class="route-stop-content">
+          <div class="route-city">Kelowna, BC</div>
+          <div class="route-business">
+            Okanagan Wine Tours
+            <span class="route-business-badge">20% off</span>
+          </div>
+        </div>
+      </div>
+      <div class="route-stop">
+        <div class="route-stop-num">4</div>
+        <div class="route-stop-content">
+          <div class="route-city">Vancouver, BC</div>
+          <div class="route-business">
+            Sea to Sky Adventures
+            <span class="route-business-badge">20% off</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADIE AI -->
+  <section class="roadie-section">
+    <div class="roadie-chat">
+      <div class="chat-header">
+        <div class="chat-dots">
+          <div class="chat-dot r"></div>
+          <div class="chat-dot y"></div>
+          <div class="chat-dot g"></div>
+        </div>
+        <div class="chat-title">Roadie · AI Trip Planner</div>
+        <div class="chat-online">Online</div>
+      </div>
+      <div class="chat-body">
+        <div class="chat-msg user">We're driving Calgary to Vancouver, family of 4 with teenagers. 7 days, not tourist traps.</div>
+        <div class="chat-msg ai">
+          Love it — Icefields Parkway is non-negotiable with teens. I'm building you a 7-day route right now.<br><br>
+          Adding these to your map:
+          <div class="chat-tags">
+            <span class="chat-tag">⛰ Athabasca Glacier</span>
+            <span class="chat-tag">🏄 Golden Rafting</span>
+            <span class="chat-tag">🦅 Jasper wildlife at dawn</span>
+          </div>
+        </div>
+        <div class="chat-msg user">All three are pass businesses? Want the 20% off everywhere.</div>
+        <div class="chat-msg ai">Yes — all pass businesses, 20% off each, unlimited use. Want me to add overnight stops in Kamloops with food too? Estimated savings: $340+</div>
+      </div>
+    </div>
+    <div class="roadie-text">
+      <p class="section-label">Meet Roadie</p>
+      <h2 class="roadie-headline">Just tell me<br>where you're<br><span class="accent">going.</span><br><span class="outline">I'll handle</span><br><span class="outline">the rest.</span></h2>
+      <p class="roadie-desc">Roadie is an AI road trip companion that knows every business on the map, remembers your travel style, and builds your entire itinerary from a single sentence.</p>
+      <a href="#" class="route-cta">Talk to Roadie →</a>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div>
+      <p class="section-label" style="color: var(--red);">
+        <span style="display:inline-flex;align-items:center;gap:12px"><span style="display:block;width:24px;height:1px;background:var(--red)"></span>The Pass</span>
+      </p>
+      <h2 class="pricing-headline">
+        Simple.<br>
+        <span>Honest.</span><br>
+        Worth it.
+      </h2>
+      <p style="margin-top: 32px; font-size: 15px; color: rgba(0,0,0,0.55); line-height: 1.7; max-width: 380px; font-weight: 300;">
+        Right now the pass gives you 20% off at 25+ adventure businesses across Western Canada — and that number grows every month.
+      </p>
+      <p style="margin-top: 16px; font-size: 13px; color: rgba(0,0,0,0.4); max-width: 360px; line-height: 1.6;">
+        Planning even one or two outdoor adventures this year? The pass pays for itself. Doing a full road trip? It pays for itself on day one.
+      </p>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-card-label">Road Trip Pass · Annual</div>
+      <div class="pricing-price">$99</div>
+      <div class="pricing-price-sub">CAD · one-time · valid one full year</div>
+      <ul class="pricing-features">
+        <li>20% off at every partner business — unlimited use</li>
+        <li>Digital pass on your phone — no app needed</li>
+        <li>Full access to the adventure map + Roadie AI</li>
+        <li>New businesses added monthly — your pass grows with it</li>
+      </ul>
+      <a href="#" class="pricing-btn">Buy the Pass — $99 →</a>
+      <p class="pricing-fine">Secure checkout · Instant delivery · Explore the map free first</p>
+      <div class="pricing-businesses">
+        <div class="businesses-label">Partner businesses today</div>
+        <div class="businesses-count">25</div>
+        <div class="businesses-sub">Growing every month · Discount doesn't apply to alcohol or already-discounted items</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <div class="cta-band-text">Ready to hit the road?<br>The map is waiting.</div>
+    <a href="#" class="cta-band-btn">Explore the Map Free →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo">Don't <span>BUG</span>Me I'm On Vacation</div>
+      <div class="footer-tagline">The road trip directory built by travellers, for travellers.<br>Alberta, Canada.</div>
+    </div>
+    <div>
+      <div class="footer-nav-label">Explore</div>
+      <ul class="footer-links">
+        <li><a href="#">Adventure Map</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Buy the Pass</a></li>
+        <li><a href="#">For Businesses</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-nav-label">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 · Don't BUGMe I'm On Vacation · All rights reserved</span>
+    <span class="footer-made">Made for road trippers 🛣</span>
+  </div>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Cursor grow on hover
+    document.querySelectorAll('a, button, input').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '32px';
+        cursor.style.height = '32px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '12px';
+        cursor.style.height = '12px';
+      });
+    });
+  </script>
+</body>
+</html>
